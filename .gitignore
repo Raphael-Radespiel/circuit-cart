@@ -1,0 +1,8 @@
+# Ignore node modules 
+node_modules
+
+# Ignore all text files
+*.txt
+
+# Ignore environment variables
+.env
