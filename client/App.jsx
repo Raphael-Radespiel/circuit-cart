@@ -1,9 +1,11 @@
+import Home from "./pages/home/home.jsx"
+
 function App() {
 
   return (
-    <div>
-      <h1>Hello fullstack world!</h1>
-    </div>
+    <>
+      <Home />
+    </>
   )
 }
 
