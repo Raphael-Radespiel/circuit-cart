@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+:root{
+  --clr-primary: #393124;
+  --clr-secondary: #697256;
+  --clr-accent: #f4a756;
+  --clr-dark: #1b211c;
+  --clr-light: #f2e7d3;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
