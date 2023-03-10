@@ -3,11 +3,12 @@ import Home from "./pages/home/home"
 import "./assets/global.css"
 
 function App() {
+  const isLoggedIn = false;
 
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar isLoggedIn={isLoggedIn}/>
       </header>
       <main>
         <Home />

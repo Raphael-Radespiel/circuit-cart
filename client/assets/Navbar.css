@@ -14,3 +14,41 @@ nav h1{
   font-size: 1.2rem;
   letter-spacing: .1em;
 }
+
+.navbar-left{
+  display: flex;
+  align-items: center;
+  gap: 8rem;
+}
+
+.filtered-search input{
+  outline: none;
+}
+
+.filtered-search button{
+  background-color: var(--clr-primary);
+  border: none;
+  color: var(--clr-accent);
+  padding: .2rem 1rem;
+  border-radius: 0px 15px 15px 0px;
+  font-weight: 900;
+}
+
+.navbar-right{
+  margin-left: auto;
+}
+
+.navbar-right button{
+  background-color: var(--clr-primary);
+  border: none;
+  color: var(--clr-accent);
+  padding: .2rem 1rem;
+  border-radius: 15px;
+  font-weight: 900;
+}
+
+.filtered-search button:hover, .navbar-right button:hover{
+  background-color: var(--clr-accent);
+  color: var(--clr-primary);
+  cursor: pointer;
+}
