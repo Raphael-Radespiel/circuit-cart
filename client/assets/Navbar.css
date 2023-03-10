@@ -1,7 +1,8 @@
 nav{
-  background-color: var(--clr-dark);
-  display: flex;
   padding: 1.5rem 2rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--clr-dark);
 }
 
 nav h1{
