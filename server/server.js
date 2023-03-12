@@ -6,14 +6,25 @@ const path = require("path");
 const dotenv = require("dotenv").config().parsed;
 
 const mysql = require("mysql");
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: dotenv.DB_HOST,
   user: dotenv.DB_USER,
   password: dotenv.DB_PASSWORD,
   database: dotenv.DB_NAME
 });
 
-connection.connect();
+db.connect((err) => {
+  if(err){
+    throw err;
+  }
+  console.log("MySQL connected");
+});
+
+db.query("SELECT ProductID FROM Products", (err, result) => {
+  if(err) throw err;
+  console.log(result);
+  console.log(result.length);
+});
 
 app.use("/", express.static(path.join(__dirname, "../client")));
 
@@ -31,5 +42,5 @@ app.listen(PORT, () => {
 process.on('exit', () => {
   console.log('About to close');
   // THROW ERRORS IN FUNCTION
-  connection.end(); 
+  db.end(); 
 });
