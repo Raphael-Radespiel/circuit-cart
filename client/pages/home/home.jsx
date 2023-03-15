@@ -1,7 +1,8 @@
 import {useState, useEffect} from "react"
+import Carousel from "./Carousel"
 
 function Home(){
-  const {products, setProducts} = useState();
+  const [products, setProducts] = useState([{}]);
   const isLoggedIn = false;
   
   useEffect(() => {
@@ -16,7 +17,10 @@ function Home(){
 
     fetch("./randomproducts", request)
       .then((response) => response.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        console.log(data);
+        setProducts(data);
+      })
       .catch((err) => (console.log(err.message)));
 
   }, []);
@@ -32,9 +36,19 @@ function Home(){
         </p>
         {!isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
       </div>
-      <div className="product-carousel">
-
-      </div>
+      <Carousel>
+        {
+        products.map((value, index) => {
+          return (
+          <div className="carousel-item" key={index}>
+            <img src={"../../assets/" + value.ImageFile}></img>
+            <h2>{value.Title}</h2>
+            <p>{value.Price}</p>
+          </div>
+          )
+        })
+        }
+      </Carousel>
     </>
   )
 }
