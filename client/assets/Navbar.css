@@ -1,53 +1,77 @@
 nav{
-  padding: 1.5rem 2rem 1rem;
+  padding: 1rem;
   display: flex;
-  justify-content: space-between;
   background-color: var(--clr-dark);
+  gap: 1.25rem;
 }
 
 nav h1{
   color: var(--clr-primary);
   background-color: var(--clr-accent);
-  padding: .2rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 15px;
   font-weight: 900;
-  font-size: 1.2rem;
-  letter-spacing: .1em;
-}
-
-.navbar-left{
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 8rem;
+}
+
+.no-select{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.filtered-search{
+  display: flex;
+  margin-left: auto;
+}
+
+.filtered-search select{
+  display: none;
 }
 
 .filtered-search input{
+  display: none;
   outline: none;
 }
 
+.search-button svg{
+  stroke-width: 2px;
+  stroke: var(--clr-accent);
+}
+
 .filtered-search button{
+  background-color: transparent;
+  border: none;
+}
+
+/*.filtered-search button{
   background-color: var(--clr-primary);
   border: none;
   color: var(--clr-accent);
   padding: .2rem 1rem;
   border-radius: 0px 15px 15px 0px;
   font-weight: 900;
-}
+}*/
 
-.navbar-right{
-  margin-left: auto;
-}
 
-.navbar-right button{
+
+
+.login-button{
   background-color: var(--clr-primary);
   border: none;
   color: var(--clr-accent);
-  padding: .2rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 15px;
-  font-weight: 900;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
-.filtered-search button:hover, .navbar-right button:hover{
+.login-button:hover{
   background-color: var(--clr-accent);
   color: var(--clr-primary);
   cursor: pointer;
