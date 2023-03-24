@@ -1,6 +1,9 @@
 .filtered-search{
   display: flex;
   margin-left: auto;
+  max-width: 30rem;
+  width: 100%;
+  justify-content: center;
 }
 
 .filtered-search select{
@@ -15,6 +18,7 @@
 }
 
 .filtered-search input{
+  flex: 1 1 auto;
   display: none;
   outline: none;
   background: #232D25;

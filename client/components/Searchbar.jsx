@@ -18,7 +18,6 @@ function Searchbar(){
     else{
       setSearchColor({color: "#F2E7D3"});
     }
-    console.log(e.target.value);
   }
 
   return (
