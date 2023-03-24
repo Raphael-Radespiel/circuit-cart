@@ -28,7 +28,7 @@ function Home(){
   return(
     <>
       <div className="hero-section">
-        <img src="../../assets/Electronic.png"></img>
+        <img src="../../assets/images/Electronic.png"></img>
         <div className="hero-text-content">
           <h1>
             Build your next project with ease! 
@@ -44,7 +44,7 @@ function Home(){
         products.map((value, index) => {
           return (
           <div className="carousel-item" key={index}>
-            <img src={"../../assets/" + value.ImageFile}></img>
+            <img src={"../../assets/images/" + value.ImageFile}></img>
             <h2>{value.Title}</h2>
             <p>{value.Price}</p>
           </div>
