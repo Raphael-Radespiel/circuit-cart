@@ -2,7 +2,6 @@
   display: flex;
   margin-left: auto;
   max-width: 30rem;
-  width: 100%;
   justify-content: center;
 }
 
@@ -41,6 +40,7 @@
 @media (min-width: 54rem){
   .filtered-search{
     margin-left: initial;
+    width: 50%;
   }
 
   .filtered-search select{
@@ -57,8 +57,18 @@
     background-color: var(--clr-accent);
   }
 
+  .filtered-search button:hover{
+    background-color: var(--clr-primary);
+    cursor: pointer;
+  }
+
   .search-button svg {
     stroke-width: 1px;
     stroke: var(--clr-dark);
+  }
+
+  .search-button:hover svg{
+    fill: var(--clr-accent);
+    stroke: var(--clr-accent);
   }
 }
