@@ -26,22 +26,6 @@ nav h1{
   user-select: none;
 }
 
-.login-button{
-  background-color: var(--clr-primary);
-  border: none;
-  color: var(--clr-accent);
-  padding: 0.5rem 1rem;
-  border-radius: 15px;
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.login-button:hover{
-  background-color: var(--clr-accent);
-  color: var(--clr-primary);
-  cursor: pointer;
-}
-
 @media (min-width: 36rem){
   nav{
     padding: 1rem 3rem;
