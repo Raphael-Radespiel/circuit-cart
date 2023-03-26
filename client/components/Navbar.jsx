@@ -2,18 +2,20 @@ import Hamburger from "./Hamburger";
 import Searchbar from "./Searchbar";
 import "../assets/Navbar.css";
 
-function Navbar({isLoggedIn}){
+function Navbar(props){
+  console.log(props);
+  // THIS IS PROP DRILLING
 
   return(
     <nav>
       <h1 className="no-select">C i r c u i t C a r t</h1>
       <Searchbar/>
-      {!isLoggedIn?
+      {!props.isLoggedIn?
           (
             <button className="login-button">Login</button>
           ):
           (
-            <Hamburger />
+            <Hamburger {...props}/>
           )
       }
       {/* 

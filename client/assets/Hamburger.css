@@ -1,0 +1,8 @@
+.hamburger{
+  display: flex;
+  align-items: center;
+}
+
+.hamburger svg{
+  fill: var(--clr-accent);
+}
