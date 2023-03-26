@@ -46,6 +46,10 @@
   .filtered-search select{
     display: block;
   }
+
+  .filtered-search select:hover, option:hover{
+    cursor: pointer;
+  }
   
   .filtered-search input{
     display: block;

@@ -14,6 +14,7 @@ nav h1{
   font-size: 1rem;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 
 .no-select{
@@ -24,15 +25,6 @@ nav h1{
   -ms-user-select: none;
   user-select: none;
 }
-
-/*.filtered-search button{
-  background-color: var(--clr-primary);
-  border: none;
-  color: var(--clr-accent);
-  padding: .2rem 1rem;
-  border-radius: 0px 15px 15px 0px;
-  font-weight: 900;
-}*/
 
 .login-button{
   background-color: var(--clr-primary);
