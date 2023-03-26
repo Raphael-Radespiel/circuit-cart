@@ -35,6 +35,7 @@
 .filtered-search button{
   background-color: transparent;
   border: none;
+  height: 100%;
 }
 
 @media (min-width: 54rem){

@@ -36,7 +36,9 @@ nav h1{
 @media (min-width: 54rem){
   nav{
     padding: 1rem 5rem;
-    justify-content: space-between;
+    justify-content: space-around;
+    max-width: 70rem;
+    margin: auto;
   }
 
   nav h1{
