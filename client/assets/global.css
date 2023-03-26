@@ -22,3 +22,7 @@ img, picture, video, canvas, svg {
   display: block;
   max-width: 100%;
 }
+
+.react-router-links{
+  text-decoration: none;
+}

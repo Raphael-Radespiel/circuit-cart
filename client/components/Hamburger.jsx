@@ -16,7 +16,7 @@ function Hamburger(props){
   return(
     <>
       {!props.isLoggedIn ?
-          (<Link to="/login"><button className="login-button">Login</button></Link>) :
+          (<Link className="react-router-links" to="/login"><button className="login-button">Login</button></Link>) :
       (<div className="hamburger">
         <button onClick={updateDropDownState}>
           <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 24 24">
@@ -26,11 +26,11 @@ function Hamburger(props){
         {isDropDown && (
         <div className="hamburger-dropdown">
           <ul>
-            <Link to="account"><li>Account</li></Link>
-            <Link to="shopping-cart"><li>Shopping Cart</li></Link>
-            <Link to="orders"><li>Order History</li></Link>
-            {props.isAdmin && (<Link to="admin-panel"><li>Admin Panel</li></Link>)} 
-            <Link to="/" onClick={logOutUser}><li>LogOut</li></Link>
+            <Link className="react-router-links" to="account"><li>Account</li></Link>
+            <Link className="react-router-links" to="shopping-cart"><li>Shopping Cart</li></Link>
+            <Link className="react-router-links" to="orders"><li>Order History</li></Link>
+            {props.isAdmin && (<Link  className="react-router-links" to="admin-panel"><li>Admin Panel</li></Link>)} 
+            <Link  className="react-router-links" to="/" onClick={logOutUser}><li>LogOut</li></Link>
           </ul>
         </div>)}
       </div>)}
