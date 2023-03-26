@@ -1,9 +1,9 @@
 import {useState, useEffect} from "react"
 import Carousel from "./Carousel"
+import "../../assets/Home.css"
 
-function Home(){
+function Home(props){
   const [products, setProducts] = useState([{}]);
-  const isLoggedIn = false;
   
   useEffect(() => {
     const request = {
@@ -34,9 +34,9 @@ function Home(){
             Build your next project with ease! 
           </h1>
           <p>
-   Our o  nline store offers a vast selection of high-quality electronic components at competitive prices with fast and reliable shipping straight to your door. Hobbyist or professional, we have everything you need to take your projects to the next level, building smarter and faster than ever before. 
+            Our online store offers a vast selection of high-quality electronic components at competitive prices with fast and reliable shipping straight to your door. Hobbyist or professional, we have everything you need to take your projects to the next level, building smarter and faster than ever before.
           </p>
-          {!isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
+          {!props.isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
         </div>
       </div>
       <Carousel>

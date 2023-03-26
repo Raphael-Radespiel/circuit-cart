@@ -28,7 +28,7 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<Home/>}/>
+          <Route path="/" element={<Home {...userSessionStatus}/>}/>
 
           <Route path="/search" element={<Search/>}/>
           <Route path="/products" element={<Products/>}/>
