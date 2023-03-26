@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { useState } from "react";
 import "../assets/Hamburger.css";
 
@@ -8,10 +9,14 @@ function Hamburger(props){
     setDropDown(previousBoolean => !previousBoolean);
   }
 
+  function logOutUser(){
+    console.log("Ill write a function to log you out");
+  }
+
   return(
     <>
       {!props.isLoggedIn ?
-      (<button className="login-button">Login</button>) :
+          (<Link to="/login"><button className="login-button">Login</button></Link>) :
       (<div className="hamburger">
         <button onClick={updateDropDownState}>
           <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 24 24">
@@ -21,11 +26,11 @@ function Hamburger(props){
         {isDropDown && (
         <div className="hamburger-dropdown">
           <ul>
-            <li>Account</li>
-            <li>Shopping Cart</li>
-            <li>Order History</li>
-            {props.isAdmin && (<li>Admin Panel</li>)} 
-            <li>LogOut</li>
+            <Link to="account"><li>Account</li></Link>
+            <Link to="shopping-cart"><li>Shopping Cart</li></Link>
+            <Link to="orders"><li>Order History</li></Link>
+            {props.isAdmin && (<Link to="admin-panel"><li>Admin Panel</li></Link>)} 
+            <Link to="/" onClick={logOutUser}><li>LogOut</li></Link>
           </ul>
         </div>)}
       </div>)}

@@ -1,13 +1,13 @@
+import { Link } from "react-router-dom"
 import Searchbar from "./Searchbar";
 import "../assets/Navbar.css";
 
 function Navbar(props){
-  console.log(props);
-  // THIS IS PROP DRILLING
-
   return(
     <nav>
-      <h1 className="no-select">C i r c u i t C a r t</h1>
+      <Link to="/">
+        <h1 className="no-select">C i r c u i t C a r t</h1>
+      </Link>
       <Searchbar/>
       {props.children}
     </nav>
