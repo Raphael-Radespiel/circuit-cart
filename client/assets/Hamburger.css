@@ -23,3 +23,18 @@
   fill: var(--clr-accent);
 }
 
+.hamburger button{
+  background-color: var(--clr-primary);
+  border: none;
+  border-radius: 6px;
+  padding: 0.25rem;
+}
+
+.hamburger button:hover{
+  background-color: var(--clr-accent);
+  cursor: pointer;
+}
+
+.hamburger button:hover svg{
+  fill: var(--clr-primary);
+}
