@@ -4,7 +4,7 @@ CREATE TABLE Products (
   Description text NOT NULL,
   AmountInStock int,
   ProductTag varchar(20) NOT NULL,
-  ProductTypes int NOT NULL,
+  ProductTypes int NOT NULL, --I'll have to create an interface for the resistances and other variable values for the components
   Price int NOT NULL, 
   ImageFile varchar(254) NOT NULL,
   PRIMARY KEY (ProductID)
@@ -32,4 +32,9 @@ CREATE TABLE UserToOrderInterface (
   PRIMARY KEY (ID)
 );
 
-
+CREATE TABLE ProductTypeInterface (
+  ID int NOT NULL,
+  ProductID int NOT NULL,
+  Type varchar(100) NOT NULL, 
+  PRIMARY KEY (ID)
+);
