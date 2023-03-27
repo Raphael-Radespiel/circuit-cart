@@ -25,12 +25,20 @@
   cursor: pointer;
 }
 
+.product-carousel-items{
+  display: flex;
+  justify-content: center;
+}
+
 .product-carousel__item{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 50%;
+  border-radius: 30px;
+  background-color: white;
+  padding: 4rem 2rem;
 }
 
 .product-carousel__item img{
