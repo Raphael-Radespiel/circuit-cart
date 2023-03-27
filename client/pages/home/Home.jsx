@@ -40,7 +40,7 @@ function Home(props){
           {!props.isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
         </div>
       </div>
-      <Carousel products={products} productCenter={Math.floor((products.length - 1) / 2)}/>
+      <Carousel products={products} productCenter={Math.floor((carouselProductsAmount- 1) / 2)}/>
     </>
   )
 }
