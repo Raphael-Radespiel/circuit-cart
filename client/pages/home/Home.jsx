@@ -4,6 +4,8 @@ import "../../assets/Home.css"
 
 function Home(props){
   const [products, setProducts] = useState([{}]);
+
+  const carouselProductsAmount = 5;
   
   useEffect(() => {
     const request = {
@@ -12,13 +14,12 @@ function Home(props){
       "Content-Type": "application/json",
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-      body: JSON.stringify({productAmount: 2})
+      body: JSON.stringify({productAmount: carouselProductsAmount})
     }
 
     fetch("./randomproducts", request)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setProducts(data);
       })
       .catch((err) => (console.log(err.message)));
@@ -39,19 +40,7 @@ function Home(props){
           {!props.isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
         </div>
       </div>
-      <Carousel>
-        {
-        products.map((value, index) => {
-          return (
-          <div className="carousel-item" key={index}>
-            <img src={"../../assets/images/" + value.ImageFile}></img>
-            <h2>{value.Title}</h2>
-            <p>{value.Price}</p>
-          </div>
-          )
-        })
-        }
-      </Carousel>
+      <Carousel products={products} productCenter={Math.floor((products.length - 1) / 2)}/>
     </>
   )
 }

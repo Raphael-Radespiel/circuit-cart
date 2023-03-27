@@ -1,0 +1,28 @@
+.product-carousel{
+  background-color: var(--clr-light);
+  margin: 0 1rem;
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+  display: flex;
+}
+
+@media (min-width: 36rem){
+  .product-carousel{
+    margin: 0rem 3rem;
+  }
+}
+
+
+@media (min-width: 54rem){
+  .product-carousel{
+    flex-direction: row;
+    padding: 3rem 6rem;
+    max-width: 60rem;
+  }
+}
+
+@media (min-width: 76rem){
+  .product-carousel{
+    margin: auto;
+  }
+}

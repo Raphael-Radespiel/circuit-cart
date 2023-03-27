@@ -95,5 +95,11 @@
 @media (min-width: 69rem){
   .hero-text-content h1{
     font-size: 4rem;
+  }  
+}
+
+@media (min-width: 76rem){
+  .hero-section{
+    margin: auto;
   }
 }
