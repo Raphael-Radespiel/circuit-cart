@@ -8,3 +8,13 @@ CREATE TABLE Products (
   ImageFile varchar(254) NOT NULL,
   PRIMARY KEY (ProductID)
 );
+
+CREATE TABLE Orders (
+  OrderID int NOT NULL,
+  ID int NOT NULL AUTO_INCREMENT,
+  Product int NOT NULL,
+  ProductType varchar(100) NOT NULL,
+  Amount int NOT NULL,
+  Price int NOT NULL,
+  PRIMARY KEY (ID)
+);

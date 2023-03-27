@@ -6,7 +6,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6rem 1rem;
+  padding: 1rem;
+  height: 33rem;
 }
 
 .product-carousel button{
@@ -35,10 +36,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: 13rem;
   border-radius: 30px;
   background-color: white;
-  padding: 4rem 2rem;
+  padding: 1rem;
+  gap: 2rem;
 }
 
 .product-carousel__item img{

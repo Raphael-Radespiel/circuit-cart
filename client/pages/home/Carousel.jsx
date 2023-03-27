@@ -26,8 +26,7 @@ function Carousel({products, productCenter}){
 
             if(index == currentIndex - 1 || index == currentIndex + 1){
               carouselItemClassName += " product-carousel__item--surrounding"; 
-            }
-            else if(index == currentIndex){
+            } else if(index == currentIndex){
               carouselItemClassName += " product-carousel__item--current";
             }
             else{
