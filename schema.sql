@@ -3,7 +3,8 @@ CREATE TABLE Products (
   Title varchar(100) NOT NULL,
   Description text NOT NULL,
   AmountInStock int,
-  ProductType varchar(20) NOT NULL,
+  ProductTag varchar(20) NOT NULL,
+  ProductTypes int NOT NULL,
   Price int NOT NULL, 
   ImageFile varchar(254) NOT NULL,
   PRIMARY KEY (ProductID)
@@ -18,3 +19,17 @@ CREATE TABLE Orders (
   Price int NOT NULL,
   PRIMARY KEY (ID)
 );
+
+CREATE TABLE UserToOrderInterface (
+  ID int NOT NULL AUTO_INCREMENT,
+  UserID int NOT NULL,
+  OrderID int NOT NULL,
+  OrderDate date NOT NULL, 
+  PaymentDate date,
+  isPayed boolean NOT NULL,
+  --Include Payment Boleto numbers and other means of payment 
+  ArivalDate date,
+  PRIMARY KEY (ID)
+);
+
+
