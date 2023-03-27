@@ -33,8 +33,22 @@ CREATE TABLE UserToOrderInterface (
 );
 
 CREATE TABLE ProductTypeInterface (
-  ID int NOT NULL,
+  ID int NOT NULL AUTO_INCREMENT,
   ProductID int NOT NULL,
   Type varchar(100) NOT NULL, 
+  PRIMARY KEY (ID)
+);
+
+CREATE TABLE User (
+  --ID WILL BE USED TO SEE ADDRESS TABLE AND PAYMENT TABLE
+  ID int NOT NULL AUTO_INCREMENT,
+  Username varchar(20),
+  Password text, 
+  UserType varchar(20),
+  FirstName varchar(30),
+  LastName varchar(30),
+  Telefone int,
+  CreatedAt timestamp,
+  LastModified timestamp,
   PRIMARY KEY (ID)
 );
