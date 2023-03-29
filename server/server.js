@@ -27,6 +27,10 @@ app.get("/*", (_req, res) => {
   res.sendFile(path.join(__dirname, "../client", "index.html"));
 })
 
+app.post("/user-signup", (req, res) => {
+  res.json({status: "success"});
+});
+
 const { PORT = 5000 } = process.env;
 
 function selectRandomProducts(idArray, amount){

@@ -2,11 +2,43 @@ import { Link } from "react-router-dom"
 
 function SignUp(){
 
+  async function handleSignUp(e){
+    e.preventDefault();
+
+    let target = e.target;
+
+    let data = {
+      fullName: target.querySelector("#SIGNUP_full-name").value,
+      email: target.querySelector("#SIGNUP_email").value,
+      password: target.querySelector("#SIGNUP_password").value,
+      confirmedPassword: target.querySelector("#SIGNUP_password-confirmation").value
+    }
+
+    // ADD A FUNCTION HERE TO SEE IF THE INFORMATION IS VALID BEFORE SENDING TO THE SERVER 
+    // and validating its safety there also
+
+    let request = {
+      method: "POST",
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    let rawResponse = await fetch("/user-signup", request);
+    let response = await rawResponse.json(); 
+
+    if(response.status == "success"){
+      window.location = './#/signup/validate';
+    }
+  }
+
   return (
     <div className="signup-container">
       <h2>Signup</h2>
       <div className="signup-container__form">
-        <form method="post" id="user-signup">
+        <form onSubmit={(e) => {handleSignUp(e)}}>
           <label htmlFor="SIGNUP_full-name">Your full name:</label>
           <input id="SIGNUP_full-name" name="full-name" type="text"></input>
           <label htmlFor="SIGNUP_email">Email:</label>
@@ -16,7 +48,7 @@ function SignUp(){
           <p>(PASSWORD CONDITION, for example, must have at least six letters)</p>
           <label htmlFor="SIGNUP_password-confirmation">Confirm your password:</label>
           <input id="SIGNUP_password-confirmation" name="password-confirmation" type="password"></input>
-          <Link to="/signup/validate"><input type="submit" value="continue"></input></Link>
+          <input type="submit" value="continue"></input>
         </form>
       </div>
     </div>

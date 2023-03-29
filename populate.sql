@@ -17,3 +17,16 @@ VALUES ('Resistor 1/4W ‑ 1,0 Ohm', 'A resistor is a passive two-terminal elect
 ('Toggle Switch 100 components', 'A diode is a two-terminal electronic component that conducts current primarily in one direction (asymmetric conductance); it has low (ideally zero) resistance in one direction, and high (ideally infinite) resistance in the other.', 548, 'component', 1, 'toggle-switch.jpg'),
 ('batteries 100 components', 'A diode is a two-terminal electronic component that conducts current primarily in one direction (asymmetric conductance); it has low (ideally zero) resistance in one direction, and high (ideally infinite) resistance in the other.', 548, 'component', 1, 'batteries.jpg'),
 ('DC-Motor 100 components', 'A diode is a two-terminal electronic component that conducts current primarily in one direction (asymmetric conductance); it has low (ideally zero) resistance in one direction, and high (ideally infinite) resistance in the other.', 548, 'component', 1, 'dc-motor.jpg');
+
+CREATE TABLE User (
+  ID int NOT NULL AUTO_INCREMENT,
+  Email varchar(320) NOT NULL,
+  FullName varchar(400) NOT NULL,
+  Password text NOT NULL, 
+  isValidated boolean NOT NULL,
+
+  UserType varchar(20),
+  CreatedAt timestamp,
+  LastModified timestamp,
+  PRIMARY KEY (ID)
+);

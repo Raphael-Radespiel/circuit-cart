@@ -5,7 +5,7 @@ function LogIn(){
     <div className="login-container">
       <h2>Login</h2>
       <div className="login-container__form">
-        <form method="post" id="user-login">
+        <form method="post" action="user-login" id="user-login">
           <label htmlFor="LOGIN_email">Email:</label>
           <input id="LOGIN_email" name="email" type="text"></input>
           <label htmlFor="LOGIN_password">Password:</label>

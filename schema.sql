@@ -41,9 +41,12 @@ CREATE TABLE ProductTypeInterface (
 
 CREATE TABLE User (
   --ID WILL BE USED TO SEE ADDRESS TABLE AND PAYMENT TABLE
+  --THIS FIRST PART OF THE USER WILL BE FOR CREATING THE ACCOUNT
   ID int NOT NULL AUTO_INCREMENT,
-  Username varchar(20),
+  Email varchar(320),
+  FullName varchar(400),
   Password text, 
+  --THE REST
   UserType varchar(20),
   FirstName varchar(30),
   LastName varchar(30),
