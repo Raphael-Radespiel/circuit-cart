@@ -17,7 +17,7 @@ import "./assets/global.css"
 import { Route, Routes } from "react-router-dom"
 
 function App() {
-  const userSessionStatus = {isLoggedIn: true, isAdmin: true};
+  const userSessionStatus = {isLoggedIn: false, isAdmin: false};
 
   return (
     <>
