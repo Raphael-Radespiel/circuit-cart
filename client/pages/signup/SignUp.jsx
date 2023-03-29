@@ -27,9 +27,8 @@ function SignUp(){
     }
 
     let rawResponse = await fetch("/user-signup", request);
-    let response = await rawResponse.json(); 
 
-    if(response.status == "success"){
+    if(String(rawResponse.status).match(/^2\d\d$/) != null){
       window.location = './#/signup/validate';
     }
   }

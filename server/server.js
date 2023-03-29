@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const bcrypt = require("bcrypt");
 app.use(express.json());
 
 const path = require("path");
@@ -27,8 +28,20 @@ app.get("/*", (_req, res) => {
   res.sendFile(path.join(__dirname, "../client", "index.html"));
 })
 
-app.post("/user-signup", (req, res) => {
-  res.json({status: "success"});
+app.post("/user-signup", async (req, res) => {
+  try{
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    let insertQuery = `INSERT INTO User (Email, FullName, Password, isValidated) VALUES ('${req.body.email}', '${req.body.fullName}', '${hashedPassword}', 0);`;
+
+    await db.query(insertQuery);
+    console.log("everything is good");
+    res.status(201).send();
+  }
+  catch{
+    res.status(500).send();
+  }
 });
 
 const { PORT = 5000 } = process.env;
