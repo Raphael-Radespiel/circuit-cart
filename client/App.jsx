@@ -4,6 +4,7 @@ import Hamburger from "./components/Hamburger"
 import Home from "./pages/home/Home"
 import Search from "./pages/search/Search"
 import LogIn from "./pages/login/LogIn"
+import Validate from "./pages/validate/Validate"
 import SignUp from "./pages/signup/SignUp"
 import Account from "./pages/account/Account"
 import CheckOut from "./pages/checkout/CheckOut"
@@ -35,6 +36,7 @@ function App() {
 
           <Route path="/login" element={<LogIn/>}/>
           <Route path="/signup" element={<SignUp/>}/>
+          <Route path="/signup/validate" element={<Validate/>}/>
 
           <Route path="/account" element={<Account/>}/>
           <Route path="/shopping-cart" element={<ShoppingCart/>}/>
