@@ -13,15 +13,16 @@ router.get("/", async (req, res) => {
   connection.query(query, async (err, result) => {
     result.map((value) => {
       if(value.VerificationToken == req.query.token){
-        console.log(req.query.token);
-        console.log(req.query.email);
-        console.log(value.VerificationToken);
 
         const insertQuery = `UPDATE User 
         SET isActive = 1
         WHERE Email='${req.query.email}'`;
 
         connection.query(insertQuery);
+
+        const deleteQuery = `UPDATE User SET VerificationToken=null WHERE VerificationToken='${req.query.token}';`
+
+        connection.query(deleteQuery);
 
         res.redirect('/');
       }
