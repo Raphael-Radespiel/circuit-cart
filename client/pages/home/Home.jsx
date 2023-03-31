@@ -1,11 +1,11 @@
 import {useState, useEffect} from "react"
-import Carousel from "./Carousel"
+import ProductListing from "./ProductListing"
 import "../../assets/Home.css"
 
 function Home(props){
   const [products, setProducts] = useState([{}]);
 
-  const carouselProductsAmount = 5;
+  const productListingAmount = 4;
   
   useEffect(() => {
     const request = {
@@ -14,7 +14,7 @@ function Home(props){
       "Content-Type": "application/json",
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-      body: JSON.stringify({productAmount: carouselProductsAmount})
+      body: JSON.stringify({productAmount: productListingAmount})
     }
 
     fetch("./randomproducts", request)
@@ -40,7 +40,7 @@ function Home(props){
           {!props.isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
         </div>
       </div>
-      <Carousel products={products} productCenter={Math.floor((carouselProductsAmount- 1) / 2)}/>
+      <ProductListing products={products}/>
     </>
   )
 }
