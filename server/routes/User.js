@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
+const crypto = require("crypto");
 
 const connection = require("../database").databaseConnection;
 
@@ -27,10 +28,9 @@ async function signup(req){
 
   const queryDate = getDateToTimeStamp(limitDate);
 
+  var token = crypto.randomBytes(64).toString('hex');
+
   // IS VALIDATED SHOULD BE isActive 
-  //
-  // in the schema create a 128 character token and timestamp send the email
-  //
   // insert our values into the database
   let insertQuery = `INSERT INTO User 
   (Email, FullName, Password, isValidated) 
@@ -40,6 +40,7 @@ async function signup(req){
   await connection.query(insertQuery);
 
   // Send out an email with the token
+  // the link would be http://localhost:5000/validate?token=token-value
 
   return 201;
 }
@@ -70,9 +71,5 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Validate the email address
-router.post("/validate", async (req, res) => {
-
-});
 
 module.exports = router;

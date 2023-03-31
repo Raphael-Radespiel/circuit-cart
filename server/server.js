@@ -7,10 +7,12 @@ const path = require("path");
 const connection = require("./database").databaseConnection;
 
 // ROUTES
-const userRoute = require('./routes/User');
-app.use("/user", userRoute); 
 const randomProductsRoute = require('./routes/RandomProducts');
 app.use("/randomproducts", randomProductsRoute); 
+const userRoute = require('./routes/User');
+app.use("/user", userRoute); 
+const validateEmailRoute = require('./routes/ValidateEmail');
+app.use("/validate", validateEmailRoute); 
 
 
 app.use("/", express.static(path.join(__dirname, "../client")));

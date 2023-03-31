@@ -23,7 +23,9 @@ CREATE TABLE User (
   Email varchar(320) NOT NULL,
   FullName varchar(400) NOT NULL,
   Password text NOT NULL, 
-  isValidated boolean NOT NULL,
+  isActive boolean NOT NULL,
+  VerificationToken varchar(128),
+  VerificationTimeLimit TIMESTAMP,
 
   UserType varchar(20),
   CreatedAt timestamp,
