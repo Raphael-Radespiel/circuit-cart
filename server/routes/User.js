@@ -5,8 +5,16 @@ const crypto = require("crypto");
 
 const connection = require("../database").databaseConnection;
 
-function getDateToTimeStamp(date){
-  return `'${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}'`;
+function getDateToInt(date){
+  const year = date.getFullYear();
+  const month = date.getMonth().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+  const day = date.getDate().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+  const hour = date.getHours().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+  const minute = date.getMinutes().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+  const second = date.getSeconds().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+
+
+  return Number(`${year}${month}${day}${hour}${minute}${second}`);
 }
 
 async function signup(req){
@@ -26,22 +34,23 @@ async function signup(req){
   const diff = 6;
   let limitDate = new Date(oldDateObj.getTime() + diff*60000);
 
-  const queryDate = getDateToTimeStamp(limitDate);
+  const queryDate = getDateToInt(limitDate);
 
   var token = crypto.randomBytes(64).toString('hex');
 
-  // IS VALIDATED SHOULD BE isActive 
   // insert our values into the database
   let insertQuery = `INSERT INTO User 
-  (Email, FullName, Password, isValidated) 
+  (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
   VALUES 
-  ('${req.email}', '${req.fullName}', '${hashedPassword}', 0);`;
+  ('${req.email}', '${req.fullName}', '${hashedPassword}', 0, '${token}', ${queryDate}, 'customer');`;
+  console.log(insertQuery);
 
   await connection.query(insertQuery);
 
   // Send out an email with the token
   // the link would be http://localhost:5000/validate?token=token-value
 
+  console.log("All went right");
   return 201;
 }
 

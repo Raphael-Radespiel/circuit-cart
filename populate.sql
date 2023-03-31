@@ -25,9 +25,10 @@ CREATE TABLE User (
   Password text NOT NULL, 
   isActive boolean NOT NULL,
   VerificationToken varchar(128),
-  VerificationTimeLimit TIMESTAMP,
+  VerificationTimeLimit bigint,
 
   UserType varchar(20),
+
   CreatedAt timestamp,
   LastModified timestamp,
   PRIMARY KEY (ID)
