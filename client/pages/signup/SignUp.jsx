@@ -8,6 +8,7 @@ function SignUp(){
     let target = e.target;
 
     let data = {
+      operationType: "signup",
       fullName: target.querySelector("#SIGNUP_full-name").value,
       email: target.querySelector("#SIGNUP_email").value,
       password: target.querySelector("#SIGNUP_password").value,
@@ -26,7 +27,7 @@ function SignUp(){
       body: JSON.stringify(data)
     }
 
-    let rawResponse = await fetch("/user-signup", request);
+    let rawResponse = await fetch("/user", request);
 
     if(String(rawResponse.status).match(/^2\d\d$/) != null){
       window.location = './#/signup/validate';

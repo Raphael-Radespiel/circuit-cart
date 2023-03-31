@@ -1,48 +1,20 @@
 const express = require("express");
 const app = express();
-const bcrypt = require("bcrypt");
 app.use(express.json());
 
 const path = require("path");
 
-const dotenv = require("dotenv").config().parsed;
+const connection = require("./database").databaseConnection;
 
-const mysql = require("mysql");
-const db = mysql.createConnection({
-  host: dotenv.DB_HOST,
-  user: dotenv.DB_USER,
-  password: dotenv.DB_PASSWORD,
-  database: dotenv.DB_NAME
-});
-
-db.connect((err) => {
-  if(err){
-    throw err;
-  }
-  console.log("MySQL connected");
-});
+// ROUTES
+const userRoute = require('./routes/User');
+app.use("/user", userRoute); 
 
 app.use("/", express.static(path.join(__dirname, "../client")));
 
 app.get("/*", (_req, res) => {
   res.sendFile(path.join(__dirname, "../client", "index.html"));
 })
-
-app.post("/user-signup", async (req, res) => {
-  try{
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    let insertQuery = `INSERT INTO User (Email, FullName, Password, isValidated) VALUES ('${req.body.email}', '${req.body.fullName}', '${hashedPassword}', 0);`;
-
-    await db.query(insertQuery);
-    console.log("everything is good");
-    res.status(201).send();
-  }
-  catch{
-    res.status(500).send();
-  }
-});
 
 const { PORT = 5000 } = process.env;
 
@@ -67,7 +39,7 @@ function selectRandomProducts(idArray, amount){
 
 // LEARN CORRECT ERROR HANDLING
 app.post("/randomproducts", (req, res) => {
-  db.query("SELECT ProductID FROM Products", async (err, result) => {
+  connection.query("SELECT ProductID FROM Products", async (err, result) => {
     console.log(req.body.productAmount);
     let productsAmount = req.body.productAmount;
     //req.body.productsAmount;
@@ -83,7 +55,7 @@ app.post("/randomproducts", (req, res) => {
       }
     }
 
-    db.query(query, (err, result) => {
+    connection.query(query, (err, result) => {
       res.send(result);
     });
   });
@@ -97,5 +69,5 @@ app.listen(PORT, () => {
 process.on('exit', () => {
   console.log('About to close');
   // THROW ERRORS IN FUNCTION
-  db.end(); 
+  connection.end(); 
 });
