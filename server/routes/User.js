@@ -28,6 +28,8 @@ function getDateToInt(date){
   return Number(`${year}${month}${day}${hour}${minute}${second}`);
 }
 
+// Still need to add safety features
+// Both on the front end and on the back end
 async function signup(req){
   console.log('Beginning SignUp function');
   // Validate information we where sent.
@@ -54,7 +56,6 @@ async function signup(req){
   (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
   VALUES 
   ('${req.email}', '${req.fullName}', '${hashedPassword}', 0, '${token}', ${queryDate}, 'customer');`;
-  console.log(insertQuery);
 
   await connection.query(insertQuery);
 
@@ -77,6 +78,44 @@ async function signup(req){
   return 201;
 }
 
+async function login(req){
+
+  // REQ must have PASSWORD AND EMAIL
+
+  try{
+    // Get password from user with same email AND isActive is true
+    const query = `SELECT Password FROM User WHERE Email='${req.email}' AND isActive=1;`;
+
+    // await bcrypt.compare(password, database password);
+    // allowed send jwt
+    // not allowed send message
+    //
+    //  DONT MAKE THIS ARRAY LOOPING 
+    //  FIX THE VALIDATE EMAIL AS WELL
+    //
+    connection.query(query, async (err, result) => {
+      console.log(result);
+      result.map(async (value) => {
+        const isValidPassword = await bcrypt.compare(req.password, value.Password);
+        if(isValidPassword){
+          console.log("Correct Password");
+
+        }
+        else{
+          // Don't log in
+          console.log("Wrong Password");
+        }
+      })
+    });
+  
+  }
+  catch{
+    return 500; 
+  }
+ 
+  return 201;
+}
+
 // Check if its login of signup 
 router.post("/", async (req, res) => {
   console.log(req.body);
@@ -93,12 +132,20 @@ router.post("/", async (req, res) => {
 
     }
     else if (req.body.operationType == "login"){
+      try{
+        const responseStatus = await login(req.body);
 
+        res.status(responseStatus).send();
+      }
+      catch{
+        res.status(500).send();
+      }
     }
 
     res.status(201).send();
   }
   catch{
+    console.log("didn't even check the body of the req");
     res.status(500).send();
   }
 });
