@@ -63,7 +63,7 @@ async function signup(req){
     from: dotenv.EMAIL_USER, // sender address
     to: req.email, // receiver (use array of string for a list)
     subject: 'Confirmation Token',// Subject line
-    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}">confirm</a></p>`
+    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}&email=${req.email}">confirm</a></p>`
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
