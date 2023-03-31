@@ -1,9 +1,20 @@
+const dotenv = require("dotenv").config().parsed;
+
 const express = require("express");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 const router = express.Router();
 const crypto = require("crypto");
 
 const connection = require("../database").databaseConnection;
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: dotenv.EMAIL_USER, 
+      pass: dotenv.EMAIL_PASSWORD,
+    },
+  });
 
 function getDateToInt(date){
   const year = date.getFullYear();
@@ -36,7 +47,7 @@ async function signup(req){
 
   const queryDate = getDateToInt(limitDate);
 
-  var token = crypto.randomBytes(64).toString('hex');
+  var token = crypto.randomBytes(32).toString('hex');
 
   // insert our values into the database
   let insertQuery = `INSERT INTO User 
@@ -48,7 +59,19 @@ async function signup(req){
   await connection.query(insertQuery);
 
   // Send out an email with the token
-  // the link would be http://localhost:5000/validate?token=token-value
+  const mailOptions = {
+    from: dotenv.EMAIL_USER, // sender address
+    to: req.email, // receiver (use array of string for a list)
+    subject: 'Confirmation Token',// Subject line
+    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}">confirm</a></p>`
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+   if(err)
+     console.log(err)
+   else
+     console.log(info);
+});
 
   console.log("All went right");
   return 201;
