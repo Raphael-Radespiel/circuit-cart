@@ -43,6 +43,9 @@ async function signup(req){
   // Make sure we are not making a duplicate account
   //
   // make it safe information (no sql injections)
+  
+  console.log("async result");
+  console.log(result);
 
   console.log("Salting and hashing password");
   // Salt and Hash the password
@@ -131,9 +134,19 @@ router.post("/", async (req, res) => {
   try{
     if(req.body.operationType == "signup"){
       try{
-        const responseStatus = await signup(req.body);
+        console.log("Checking if email exists already");
+        let validityQuery = `SELECT * FROM User WHERE Email='${req.email}'`;
+        await connection.query(validityQuery, async (err, result) => {
+          if(result != undefined){
+            res.status(500).send();
+          }
+          else{
+            const responseStatus = await signup(req.body);
 
-        res.status(responseStatus).send();
+            res.status(responseStatus).send();
+
+          }
+        });
       }
       catch{
         res.status(500).send();
