@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom"
 import "../../assets/Forms.css"
+import { validateLoginForm } from "../../utils/ClientSideValidation" 
 
 function LogIn(){
 
@@ -14,8 +15,11 @@ function LogIn(){
       password: target.querySelector("#LOGIN_password").value
     }
 
-    // ADD A FUNCTION HERE TO SEE IF THE INFORMATION IS VALID BEFORE SENDING TO THE SERVER 
-    // and validating its safety there also
+    // Validate data 
+    if(!validateLoginForm(data)){
+      return;
+    }
+
 
     let request = {
       method: "POST",

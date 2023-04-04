@@ -1,39 +1,7 @@
 import "../../assets/Forms.css"
+import { validateSignupForm } from "../../utils/ClientSideValidation" 
 
 function SignUp(){
-
-  function checkIfValidForm(data){
-    // Test Name
-    if(data.fullName == ""){
-      console.log("Sorry, your name is not an empty string");
-      return false;
-    }
-
-    // Test Email
-    const emailRegex = /^\S+@\S+\.\S+$/;
-    if(!emailRegex.test(data.email)){
-      console.log("Sorry, invalid email");
-      return false;
-    }
-
-    // Test Password
-    if(data.password.length < 8){
-      console.log("Sorry, password needs to be 8 or longer");
-      return false;
-    }
-
-    if(data.password.length > 16){
-      console.log("Sorry, password is longer than 16 characters");
-      return false;
-    }
-
-    if(data.password != data.confirmedPassword){
-      console.log("Your password and confirmed password are not the same");
-      return false;
-    }
-
-    return true;
-  }
 
   async function handleSignUp(e){
     e.preventDefault();
@@ -49,7 +17,7 @@ function SignUp(){
     }
 
     // VALIDATE DATA 
-    if(!checkIfValidForm(data)){
+    if(!validateSignupForm(data)){
       return;
     }
 
