@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import "../../assets/Forms.css"
 
 function SignUp(){
 
@@ -35,9 +35,8 @@ function SignUp(){
   }
 
   return (
-    <div className="signup-container">
+    <div className="form-component">
       <h2>Signup</h2>
-      <div className="signup-container__form">
         <form onSubmit={(e) => {handleSignUp(e)}}>
           <label htmlFor="SIGNUP_full-name">Your full name:</label>
           <input id="SIGNUP_full-name" name="full-name" type="text"></input>
@@ -48,9 +47,8 @@ function SignUp(){
           <p>(PASSWORD CONDITION, for example, must have at least six letters)</p>
           <label htmlFor="SIGNUP_password-confirmation">Confirm your password:</label>
           <input id="SIGNUP_password-confirmation" name="password-confirmation" type="password"></input>
-          <input type="submit" value="continue"></input>
+          <input className="primary-button" type="submit" value="continue"></input>
         </form>
-      </div>
     </div>
   )
 }

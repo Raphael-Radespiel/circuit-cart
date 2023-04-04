@@ -16,6 +16,14 @@ const transporter = nodemailer.createTransport({
     },
   });
 
+
+// TODO:
+// ADD ALL SAFETY FEATURES
+// LIMIT THE CREATION OF SEVERAL ACCOUNTS
+// DONT CHECK YOUR DATABASE QUERIES EXPECTING TO GET SEVERAL ACCOUNTS WITH THE SAME EMAIL
+// CHECK HOW YOURE GONNA SAVE SESSION AUTHENTICATION
+// JWT OR SESSION COOKIES
+
 function getDateToInt(date){
   const year = date.getFullYear();
   const month = date.getMonth().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
