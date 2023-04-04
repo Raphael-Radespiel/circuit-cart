@@ -19,25 +19,20 @@ const transporter = nodemailer.createTransport({
     },
   });
 
+const {getDateToInt} = require("../utils/DateFunctions");
+
 
 // TODO:
+//  1 - CHECK IF EMAIL ALREADY IN DATABASE BEFORE CREATING 
+//  2 - CHANGE CODE TO HANDLE ONLY ONE RESULT ON USER QUERIES
+//  3 - CHECK IF USER IS ACTIVE WHEN LOGIN IN
+//
 // ADD ALL SAFETY FEATURES
 // LIMIT THE CREATION OF SEVERAL ACCOUNTS
 // DONT CHECK YOUR DATABASE QUERIES EXPECTING TO GET SEVERAL ACCOUNTS WITH THE SAME EMAIL
 // CHECK HOW YOURE GONNA SAVE SESSION AUTHENTICATION
 // JWT OR SESSION COOKIES
 
-function getDateToInt(date){
-  const year = date.getFullYear();
-  const month = date.getMonth().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-  const day = date.getDate().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-  const hour = date.getHours().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-  const minute = date.getMinutes().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-  const second = date.getSeconds().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-
-
-  return Number(`${year}${month}${day}${hour}${minute}${second}`);
-}
 
 // Still need to add safety features
 // Both on the front end and on the back end
@@ -49,10 +44,12 @@ async function signup(req){
   //
   // make it safe information (no sql injections)
 
+  console.log("Salting and hashing password");
   // Salt and Hash the password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.password, salt);
 
+  console.log("Creating email validation token and time limit");
   // Create email validation token and 6 minute time limit
   let oldDateObj = new Date();
   const diff = 6;
@@ -70,6 +67,7 @@ async function signup(req){
 
   await connection.query(insertQuery);
 
+  console.log("Sending Email");
   // Send out an email with the token
   const mailOptions = {
     from: dotenv.EMAIL_USER, // sender address
