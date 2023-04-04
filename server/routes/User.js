@@ -7,6 +7,9 @@ const router = express.Router();
 const crypto = require("crypto");
 
 const connection = require("../database").databaseConnection;
+const cookieParser = require('cookie-parser');
+
+router.use(cookieParser());
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
