@@ -43,9 +43,6 @@ async function signup(req){
   // Make sure we are not making a duplicate account
   //
   // make it safe information (no sql injections)
-  
-  console.log("async result");
-  console.log(result);
 
   console.log("Salting and hashing password");
   // Salt and Hash the password
@@ -128,28 +125,23 @@ async function login(req){
   return 201;
 }
 
-// Check if its login of signup 
-// REMOVE CONCEPT OF OPERATION TYPE AND JUST SPLIT IT INTO TWO ROUTES 
 router.post("/signup", async (req, res) => {
-  console.log("CALLED ROUTE USER/SIGNUP");
-  console.log(req.body);
-
   try{
-    console.log("Checking if email exists already");
-    let validityQuery = `SELECT * FROM User WHERE Email='${req.email}'`;
-    await connection.query(validityQuery, async (err, result) => {
-      if(result != undefined){
-        res.status(500).send();
-      }
-      else{
+    let isExistingAccountQuery = `SELECT * FROM User WHERE Email='${req.body.email}'`;
+
+    connection.query(isExistingAccountQuery, async (err, result) => {
+
+      if(result.length == 0){
         const responseStatus = await signup(req.body);
-
         res.status(responseStatus).send();
-
+        return;
       }
+
+      res.status(500).send();
     });
   }
-  catch{
+  catch(error){
+    console.log(error);
     res.status(500).send();
   }
 });
@@ -163,7 +155,8 @@ router.post("/login", async (req, res) => {
 
     res.status(responseStatus).send();
   }
-  catch{ 
+  catch(error){
+    console.log(error);
     res.status(500).send();
   }
 });
