@@ -3,13 +3,14 @@ import { validateSignupForm } from "../../utils/ClientSideValidation"
 
 function SignUp(){
 
+  // TODO:
+  // ADD CORRECT ERROR HANDLING FOR FAILED VALIDATION OF ANY ERRORS FROM THE SERVER
   async function handleSignUp(e){
     e.preventDefault();
 
     let target = e.target;
 
     let data = {
-      operationType: "signup",
       fullName: target.querySelector("#SIGNUP_full-name").value,
       email: target.querySelector("#SIGNUP_email").value,
       password: target.querySelector("#SIGNUP_password").value,
@@ -30,7 +31,7 @@ function SignUp(){
       body: JSON.stringify(data)
     }
 
-    let rawResponse = await fetch("/user", request);
+    let rawResponse = await fetch("/user/signup", request);
 
     if(String(rawResponse.status).match(/^2\d\d$/) != null){
       window.location = './#/signup/validate';

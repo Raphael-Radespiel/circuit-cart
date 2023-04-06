@@ -129,48 +129,43 @@ async function login(req){
 }
 
 // Check if its login of signup 
-router.post("/", async (req, res) => {
+// REMOVE CONCEPT OF OPERATION TYPE AND JUST SPLIT IT INTO TWO ROUTES 
+router.post("/signup", async (req, res) => {
+  console.log("CALLED ROUTE USER/SIGNUP");
   console.log(req.body);
+
   try{
-    if(req.body.operationType == "signup"){
-      try{
-        console.log("Checking if email exists already");
-        let validityQuery = `SELECT * FROM User WHERE Email='${req.email}'`;
-        await connection.query(validityQuery, async (err, result) => {
-          if(result != undefined){
-            res.status(500).send();
-          }
-          else{
-            const responseStatus = await signup(req.body);
-
-            res.status(responseStatus).send();
-
-          }
-        });
-      }
-      catch{
+    console.log("Checking if email exists already");
+    let validityQuery = `SELECT * FROM User WHERE Email='${req.email}'`;
+    await connection.query(validityQuery, async (err, result) => {
+      if(result != undefined){
         res.status(500).send();
       }
-
-    }
-    else if (req.body.operationType == "login"){
-      try{
-        const responseStatus = await login(req.body);
+      else{
+        const responseStatus = await signup(req.body);
 
         res.status(responseStatus).send();
-      }
-      catch{
-        res.status(500).send();
-      }
-    }
 
-    res.status(201).send();
+      }
+    });
   }
   catch{
-    console.log("didn't even check the body of the req");
     res.status(500).send();
   }
 });
 
+router.post("/login", async (req, res) => {
+  console.log("CALLED ROUTE USER/LOGIN");
+  console.log(req.body);
+
+  try{
+    const responseStatus = await login(req.body);
+
+    res.status(responseStatus).send();
+  }
+  catch{ 
+    res.status(500).send();
+  }
+});
 
 module.exports = router;
