@@ -20,7 +20,7 @@ function selectRandomProducts(idArray, amount){
 
 // LEARN CORRECT ERROR HANDLING
 router.post("/", (req, res) => {
-  connection.query("SELECT ProductID FROM Products", async (err, result) => {
+  connection.query("SELECT ProductID FROM Products;", async (err, result) => {
     let productsAmount = req.body.productAmount;
     //req.body.productsAmount;
     let products = await selectRandomProducts(result, productsAmount);
@@ -28,14 +28,14 @@ router.post("/", (req, res) => {
     let query = "SELECT Title, Price, ImageFile FROM Products WHERE";
 
     for(i = 0; i < productsAmount; i++) {
-      query += ` ProductID=${products[i]}`;
+      query += ` ProductID = ?`;
 
       if(i != productsAmount - 1) {
         query += " OR";
       }
     }
 
-    connection.query(query, (err, result) => {
+    connection.query(query, products, (err, result) => {
       res.send(result);
     });
   });

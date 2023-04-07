@@ -63,9 +63,9 @@ async function signup(req){
   let insertQuery = `INSERT INTO User 
   (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
   VALUES 
-  ('${req.email}', '${req.fullName}', '${hashedPassword}', 0, '${token}', ${queryDate}, 'customer');`;
+  (?, ?, ?, 0, ?, ?, 'customer');`;
 
-  await connection.query(insertQuery);
+  await connection.query(insertQuery, [req.email, req.fullName, hashedPassword, token, queryDate]);
 
   console.log("Sending Email");
   // Send out an email with the token
@@ -93,7 +93,7 @@ async function login(req){
 
   try{
     // Get password from user with same email AND isActive is true
-    const query = `SELECT Password FROM User WHERE Email='${req.email}' AND isActive=1;`;
+    const query = `SELECT Password FROM User WHERE Email = ? AND isActive = 1;`;
 
     // await bcrypt.compare(password, database password);
     // allowed send jwt
@@ -102,7 +102,7 @@ async function login(req){
     //  DONT MAKE THIS ARRAY LOOPING 
     //  FIX THE VALIDATE EMAIL AS WELL
     //
-    connection.query(query, async (err, result) => {
+    connection.query(query, [req.email], async (err, result) => {
       console.log(result);
       result.map(async (value) => {
         const isValidPassword = await bcrypt.compare(req.password, value.Password);
@@ -127,9 +127,9 @@ async function login(req){
 
 router.post("/signup", async (req, res) => {
   try{
-    let isExistingAccountQuery = `SELECT * FROM User WHERE Email='${req.body.email}'`;
+    let isExistingAccountQuery = `SELECT * FROM User WHERE Email= ?;`;
 
-    connection.query(isExistingAccountQuery, async (err, result) => {
+    connection.query(isExistingAccountQuery, [req.body.email], async (err, result) => {
 
       if(result.length == 0){
         const responseStatus = await signup(req.body);

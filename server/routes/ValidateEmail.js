@@ -6,13 +6,14 @@ const {getDateToInt} = require("../utils/DateFunctions");
 
 // Validate the email address
 router.get("/", async (req, res) => {
-  console.log("I was called");
+  console.log("VALIDATION OF EMAIL BEGINS");
   console.log(req.query.token);
+  console.log(req.query.email);
 
   // Check if token is present
-  const query = `SELECT VerificationToken, VerificationTimeLimit FROM User WHERE Email='${req.query.email}';`
+  const query = `SELECT VerificationToken, VerificationTimeLimit FROM User WHERE Email= ?;`
 
-  connection.query(query, async (err, result) => {
+  connection.query(query, [req.query.email], async (err, result) => {
 
     // If token is present and is valid, set isActive to true 
     // and 'delete' verification token
@@ -37,15 +38,14 @@ router.get("/", async (req, res) => {
 
       const insertQuery = `UPDATE User 
       SET isActive = 1
-      WHERE Email='${req.query.email}'`;
+      WHERE Email = ?;`;
       
-      connection.query(insertQuery);
+      connection.query(insertQuery, [req.query.email]);
       
-      const deleteQuery = `UPDATE User SET VerificationToken=null WHERE VerificationToken='${req.query.token}';`
+      const deleteQuery = `UPDATE User SET VerificationToken=null WHERE VerificationToken = ?;`
       
-      connection.query(deleteQuery);
+      connection.query(deleteQuery, [req.query.token]);
       
-      console.log("done");
       res.redirect('/');
     });
 
