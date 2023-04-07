@@ -1,4 +1,5 @@
 const dotenv = require("dotenv").config().parsed;
+const validation = require("../../client/utils/ClientSideValidation");
 
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -21,70 +22,72 @@ const transporter = nodemailer.createTransport({
 
 const {getDateToInt} = require("../utils/DateFunctions");
 
-
-// TODO:
-//  1 - CHECK IF EMAIL ALREADY IN DATABASE BEFORE CREATING 
-//  2 - CHANGE CODE TO HANDLE ONLY ONE RESULT ON USER QUERIES
-//  3 - CHECK IF USER IS ACTIVE WHEN LOGIN IN
-//
-// ADD ALL SAFETY FEATURES
-// LIMIT THE CREATION OF SEVERAL ACCOUNTS
-// DONT CHECK YOUR DATABASE QUERIES EXPECTING TO GET SEVERAL ACCOUNTS WITH THE SAME EMAIL
-// CHECK HOW YOURE GONNA SAVE SESSION AUTHENTICATION
-// JWT OR SESSION COOKIES
-
-
-// Still need to add safety features
-// Both on the front end and on the back end
-async function signup(req){
-  console.log('Beginning SignUp function');
-  // Validate information we where sent.
-  //
-  // Make sure we are not making a duplicate account
-  //
-  // make it safe information (no sql injections)
-
-  console.log("Salting and hashing password");
-  // Salt and Hash the password
+async function hashPassword(password){
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(req.password, salt);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+}
 
-  console.log("Creating email validation token and time limit");
-  // Create email validation token and 6 minute time limit
-  let oldDateObj = new Date();
-  const diff = 6;
-  let limitDate = new Date(oldDateObj.getTime() + diff*60000);
+async function createVerificationToken() {
+  const token = crypto.randomBytes(32).toString('hex');
+  const limitDate = new Date(Date.now() + 6 * 60000); // 6 minute time limit
+  const verificationTimeLimit = getDateToInt(limitDate);
+  return { token, verificationTimeLimit };
+}
 
-  const queryDate = getDateToInt(limitDate);
-
-  var token = crypto.randomBytes(32).toString('hex');
-
-  // insert our values into the database
+async function insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit){
   let insertQuery = `INSERT INTO User 
   (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
   VALUES 
   (?, ?, ?, 0, ?, ?, 'customer');`;
 
-  await connection.query(insertQuery, [req.email, req.fullName, hashedPassword, token, queryDate]);
+  await connection.query(insertQuery, [email, fullName, hashedPassword, token, verificationTimeLimit]);
+}
 
-  console.log("Sending Email");
-  // Send out an email with the token
+function sendVerificationEmail(email, token){
   const mailOptions = {
     from: dotenv.EMAIL_USER, // sender address
-    to: req.email, // receiver (use array of string for a list)
+    to: email, // receiver (use array of string for a list)
     subject: 'Confirmation Token',// Subject line
-    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}&email=${req.email}">confirm</a></p>`
+    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}&email=${email}">confirm</a></p>`
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
    if(err)
-     console.log(err)
+    throw err;
    else
      console.log(info);
-});
+  });
+}
 
-  console.log("All went right");
-  return 201;
+//TODO: 
+// CHECK HOW YOURE GONNA SAVE SESSION AUTHENTICATION
+// SESSION COOKIES
+async function signup(req){
+  try{
+    const { fullName, email, password} = req;
+
+    // Check if input data is valid
+    if(!validation.validateSignupForm(req)){
+      throw new Error("Invalid input data");
+    }
+
+    // Salt and Hash the password
+    const hashedPassword = await hashPassword(password);
+
+    // Create email validation token and 6 minute time limit
+    const { token, verificationTimeLimit } = await createVerificationToken();
+
+    // insert our values into the database
+    await insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit);
+
+    // Send out an email with the token
+    sendVerificationEmail(email, token);
+  }
+  catch(error){
+    console.log(error);
+    throw new Error(`Error in signup function: ${error.message}`);
+  }
 }
 
 async function login(req){
@@ -127,22 +130,27 @@ async function login(req){
 
 router.post("/signup", async (req, res) => {
   try{
-    let isExistingAccountQuery = `SELECT * FROM User WHERE Email= ?;`;
+    let duplicateEmailQuery = `SELECT * FROM User WHERE Email= ?;`;
 
-    connection.query(isExistingAccountQuery, [req.body.email], async (err, result) => {
-
-      if(result.length == 0){
-        const responseStatus = await signup(req.body);
-        res.status(responseStatus).send();
+    connection.query(duplicateEmailQuery, [req.body.email], async (err, result) => {
+      if(err){
+        res.status(500).send({ success: false, message: 'database error'});
         return;
       }
 
-      res.status(500).send();
+      // If the account is a duplicate
+      if(result.length != 0){
+        res.status(500).send({ success: false, message: "Account email already exists"});
+        return;
+      }
+
+      await signup(req.body);
+      res.status(201).send({success: true, message: "Successful Signup"});
     });
   }
   catch(error){
-    console.log(error);
-    res.status(500).send();
+    console.log(error.message);
+    res.status(500).send({success: false, message: error.message, error: error});
   }
 });
 

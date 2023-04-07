@@ -54,4 +54,7 @@ function validateLoginForm(data){
   return true;
 }
 
-export {validateSignupForm, validateLoginForm}
+
+if(this && typeof module == "object" && module.exports && this === module.exports) {
+   module.exports = {validateSignupForm, validateLoginForm};  // for example
+}
