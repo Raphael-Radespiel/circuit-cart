@@ -24,8 +24,9 @@ CREATE TABLE User (
   FullName varchar(400) NOT NULL,
   Password text NOT NULL, 
   isActive boolean NOT NULL,
-  VerificationToken varchar(128),
+  VerificationToken varchar(64),
   VerificationTimeLimit bigint,
+  SessionID VARCHAR(64), 
 
   UserType varchar(20),
 

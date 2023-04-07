@@ -36,7 +36,7 @@ function SignUp(){
     let response = await fetch("/user/signup", request);
 
     if(response.ok){
-      window.location = './#/signup/validate';
+      window.location = '/#/validate';
     }
     else{
       const jsonResponse = await response.json();

@@ -36,7 +36,7 @@ function App() {
 
           <Route path="/login" element={<LogIn/>}/>
           <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/signup/validate" element={<Validate/>}/>
+          <Route path="/validate" element={<Validate/>}/>
 
           <Route path="/account" element={<Account/>}/>
           <Route path="/shopping-cart" element={<ShoppingCart/>}/>
