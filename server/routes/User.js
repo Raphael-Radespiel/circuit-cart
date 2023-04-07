@@ -1,5 +1,5 @@
 const dotenv = require("dotenv").config().parsed;
-const validation = require("../../client/utils/ClientSideValidation");
+const validation = require("../utils/ServerSideValidation");
 
 const express = require("express");
 const bcrypt = require("bcrypt");

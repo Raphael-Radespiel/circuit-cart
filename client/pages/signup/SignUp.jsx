@@ -3,8 +3,6 @@ import { validateSignupForm } from "../../utils/ClientSideValidation"
 
 function SignUp(){
 
-  // TODO:
-  // ADD CORRECT ERROR HANDLING FOR FAILED VALIDATION OF ANY ERRORS FROM THE SERVER
   async function handleSignUp(e){
     e.preventDefault();
 
@@ -18,7 +16,11 @@ function SignUp(){
     }
 
     // VALIDATE DATA 
-    if(!validateSignupForm(data)){
+    try{
+      validateSignupForm(data);
+    }
+    catch(error){
+      alert(`${error}`)
       return;
     }
 
@@ -31,10 +33,14 @@ function SignUp(){
       body: JSON.stringify(data)
     }
 
-    let rawResponse = await fetch("/user/signup", request);
+    let response = await fetch("/user/signup", request);
 
-    if(String(rawResponse.status).match(/^2\d\d$/) != null){
+    if(response.ok){
       window.location = './#/signup/validate';
+    }
+    else{
+      const jsonResponse = await response.json();
+      alert(`Error: ${jsonResponse.message}`);
     }
   }
 
