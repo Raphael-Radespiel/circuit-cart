@@ -8,8 +8,10 @@ const router = express.Router();
 const crypto = require("crypto");
 
 const connection = require("../database").databaseConnection;
-const cookieParser = require('cookie-parser');
 
+// TODO: 
+// COOKIE PARSER SHOULD ONLY BE USED IN LOGIN AND VALIDATE EMAIL FUNCTIONS
+const cookieParser = require('cookie-parser');
 router.use(cookieParser());
 
 const transporter = nodemailer.createTransport({
@@ -22,112 +24,9 @@ const transporter = nodemailer.createTransport({
 
 const {getDateToInt} = require("../utils/DateFunctions");
 
-async function hashPassword(password){
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
-}
-
-async function createVerificationToken() {
-  const token = crypto.randomBytes(32).toString('hex');
-  const limitDate = new Date(Date.now() + 6 * 60000); // 6 minute time limit
-  const verificationTimeLimit = getDateToInt(limitDate);
-  return { token, verificationTimeLimit };
-}
-
-async function insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit){
-  let insertQuery = `INSERT INTO User 
-  (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
-  VALUES 
-  (?, ?, ?, 0, ?, ?, 'customer');`;
-
-  await connection.query(insertQuery, [email, fullName, hashedPassword, token, verificationTimeLimit]);
-}
-
-function sendVerificationEmail(email, token){
-  const mailOptions = {
-    from: dotenv.EMAIL_USER, // sender address
-    to: email, // receiver (use array of string for a list)
-    subject: 'Confirmation Token',// Subject line
-    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}&email=${email}">confirm</a></p>`
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-   if(err)
-    throw err;
-   else
-     console.log(info);
-  });
-}
-
-//TODO: 
-// CHECK HOW YOURE GONNA SAVE SESSION AUTHENTICATION
-// SESSION COOKIES
-async function signup(req){
-  try{
-    const { fullName, email, password} = req;
-
-    // Check if input data is valid
-    if(!validation.validateSignupForm(req)){
-      throw new Error("Invalid input data");
-    }
-
-    // Salt and Hash the password
-    const hashedPassword = await hashPassword(password);
-
-    // Create email validation token and 6 minute time limit
-    const { token, verificationTimeLimit } = await createVerificationToken();
-
-    // insert our values into the database
-    await insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit);
-
-    // Send out an email with the token
-    sendVerificationEmail(email, token);
-  }
-  catch(error){
-    console.log(error);
-    throw new Error(`Error in signup function: ${error.message}`);
-  }
-}
-
-async function login(req){
-
-  // REQ must have PASSWORD AND EMAIL
-
-  try{
-    // Get password from user with same email AND isActive is true
-    const query = `SELECT Password FROM User WHERE Email = ? AND isActive = 1;`;
-
-    // await bcrypt.compare(password, database password);
-    // allowed send jwt
-    // not allowed send message
-    //
-    //  DONT MAKE THIS ARRAY LOOPING 
-    //  FIX THE VALIDATE EMAIL AS WELL
-    //
-    connection.query(query, [req.email], async (err, result) => {
-      console.log(result);
-      result.map(async (value) => {
-        const isValidPassword = await bcrypt.compare(req.password, value.Password);
-        if(isValidPassword){
-          console.log("Correct Password");
-
-        }
-        else{
-          // Don't log in
-          console.log("Wrong Password");
-        }
-      })
-    });
-  
-  }
-  catch{
-    return 500; 
-  }
- 
-  return 201;
-}
-
+////////////
+// SIGNUP //
+////////////
 router.post("/signup", async (req, res) => {
   try{
     let duplicateEmailQuery = `SELECT * FROM User WHERE Email= ?;`;
@@ -154,6 +53,73 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+async function signup(req){
+  try{
+    const { fullName, email, password} = req;
+
+    // Check if input data is valid
+    if(!validation.validateSignupForm(req)){
+      throw new Error("Invalid input data");
+    }
+
+    // Salt and Hash the password
+    const hashedPassword = await hashPassword(password);
+    // Create email validation token and 6 minute time limit
+    const { token, verificationTimeLimit } = await createVerificationToken();
+
+    // insert our values into the database
+    await insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit);
+
+    // Send out an email with the token
+    sendVerificationEmail(email, token);
+  }
+  catch(error){
+    console.log(error);
+    throw new Error(`Error in signup function: ${error.message}`);
+  }
+}
+
+async function hashPassword(password){
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+}
+
+async function createVerificationToken() {
+  const token = crypto.randomBytes(32).toString('hex');
+  const limitDate = new Date(Date.now() + 6 * 60000); // 6 minute time limit
+  const verificationTimeLimit = getDateToInt(limitDate);
+  return { token, verificationTimeLimit };
+}
+
+async function insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit){
+  let insertQuery = `INSERT INTO User 
+  (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
+  VALUES 
+  (?, ?, ?, 0, ?, ?, 'customer');`;
+
+  await connection.query(insertQuery, [email, fullName, hashedPassword, token, verificationTimeLimit]);
+}
+
+function sendVerificationEmail(email, token){
+  const mailOptions = {
+    from: dotenv.EMAIL_USER, 
+    to: email, 
+    subject: 'Confirmation Token',
+    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}&email=${email}">confirm</a></p>`
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+   if(err)
+    throw err;
+   else
+     console.log(info);
+  });
+}
+
+///////////
+// LOGIN //
+///////////
 router.post("/login", async (req, res) => {
   console.log("CALLED ROUTE USER/LOGIN");
   console.log(req.body);
@@ -168,5 +134,44 @@ router.post("/login", async (req, res) => {
     res.status(500).send();
   }
 });
+
+async function login(req){
+
+  // REQ must have PASSWORD AND EMAIL
+
+  try{
+    // Get password from user with same email AND isActive is true
+    const query = `SELECT Password FROM User WHERE Email = ? AND isActive = 1;`;
+
+    // await bcrypt.compare(password, database password);
+    // allowed send jwt
+    // not allowed send message
+    //
+    //  DONT MAKE THIS ARRAY LOOPING 
+    //  FIX THE VALIDATE EMAIL AS WELL
+    //
+    connection.query(query, [req.email], async (err, result) => {
+      // TODO: NO NEED FOR MAP MY FRIEND, USE result[0]. ITS JUST AN ARRAY
+      console.log(result);
+      result.map(async (value) => {
+        const isValidPassword = await bcrypt.compare(req.password, value.Password);
+        if(isValidPassword){
+          console.log("Correct Password");
+
+        }
+        else{
+          // Don't log in
+          console.log("Wrong Password");
+        }
+      })
+    });
+  
+  }
+  catch{
+    return 500; 
+  }
+ 
+  return 201;
+}
 
 module.exports = router;

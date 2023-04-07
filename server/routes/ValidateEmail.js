@@ -4,52 +4,58 @@ const connection = require("../database").databaseConnection;
 
 const {getDateToInt} = require("../utils/DateFunctions");
 
+async function confirmValidUserInDatabase(token){
+  try{
+    const updateQuery = `UPDATE User 
+    SET isActive = 1, VerificationToken = null
+    WHERE VerificationToken = ?;`;
+    connection.query(updateQuery, [token]);
+  } 
+  catch(error){
+    throw error;
+  }
+}
+
 // Validate the email address
+// TODO: 
+// IF EVERYTHING GOES WELL, WE SEND THE USER TO THE MAIN PAGE, SET COOKIES
+// IF THE TOKEN WAS EXPIRED, WE SEND THEM TO THE VALIDATION PAGE
+// WITH A BUTTON TO CREATE A NEW TOKEN, AND AN EXPLANATION OF WHAT HAPPENED
+// IF THE TOKEN IS INVALID SEND THEM TO VALIDATION PAGE AND SAY "TOKEN OR EMAIL INVALID"
 router.get("/", async (req, res) => {
-  console.log("VALIDATION OF EMAIL BEGINS");
-  console.log(req.query.token);
-  console.log(req.query.email);
+  try{
+    const { token, email } = req.query;
 
-  // Check if token is present
-  const query = `SELECT VerificationToken, VerificationTimeLimit FROM User WHERE Email= ?;`
+    const tokenQuery = `SELECT VerificationToken, VerificationTimeLimit FROM User WHERE Email = ?;`
 
-  connection.query(query, [req.query.email], async (err, result) => {
-
-    // If token is present and is valid, set isActive to true 
-    // and 'delete' verification token
-    result.map((value) => {
-      console.log(result.VerificationToken);
-      console.log(req.query.token);
-      
-      if(value.VerificationToken != req.query.token){
-        // INVALID TOKEN
-        console.log("invalid");
-        return;
+    connection.query(tokenQuery, [email], async (err, result) => {
+      if(err){
+        throw err;
       }
 
-      // CHECK IF TIME EXPIRED
-      const currentTime = new Date();
-      if(value.VerificationTimeLimit < getDateToInt(currentTime)){
-        // EXPIRED TOKEN
-        console.log("Expired Time Limit");
-        return;
+      const { VerificationTimeLimit, VerificationToken } = result[0];
+
+      if(VerificationToken != token){
+        throw new Error("Incorrect Token");
+      }
+
+      if(VerificationTimeLimit < getDateToInt(Date.now())){
+        // SHOW THEM THE HTML PAGE WITH A POSSIBILITY TO RESEND THE TOKEN
+        throw new Error("Expired Verification Token");
       }
       
+      // Update isActive and delete token for user
+      await confirmValidUserInDatabase(token);
 
-      const insertQuery = `UPDATE User 
-      SET isActive = 1
-      WHERE Email = ?;`;
+      // TODO: ADD COOKIES 
       
-      connection.query(insertQuery, [req.query.email]);
-      
-      const deleteQuery = `UPDATE User SET VerificationToken=null WHERE VerificationToken = ?;`
-      
-      connection.query(deleteQuery, [req.query.token]);
-      
-      res.redirect('/');
+      res.status(201).redirect('/');
     });
-
-  });
+  }
+  catch (error){
+    console.log(error.message);
+    res.status(500).send({ success: false, message: error.message});
+  }
 });
 
 module.exports = router;
