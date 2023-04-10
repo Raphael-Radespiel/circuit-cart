@@ -5,21 +5,24 @@ import { validateLoginForm } from "../../utils/ClientSideValidation"
 function LogIn(){
 
   async function handleLogIn(e){
+    console.log('hello');
     e.preventDefault();
 
     let target = e.target;
 
     let data = {
-      operationType: "login",
       email: target.querySelector("#LOGIN_email").value,
       password: target.querySelector("#LOGIN_password").value
     }
 
     // Validate data 
-    if(!validateLoginForm(data)){
+    try{
+      validateLoginForm(data);
+    }
+    catch(error){
+      alert(`${error}`)
       return;
     }
-
 
     let request = {
       method: "POST",
@@ -30,10 +33,17 @@ function LogIn(){
       body: JSON.stringify(data)
     }
 
-    let rawResponse = await fetch("/user", request);
+    console.log(data);
+    console.log(request);
 
-    if(String(rawResponse.status).match(/^2\d\d$/) != null){
-      window.location = './';
+    let response = await fetch("/user/login", request);
+
+    if(response.ok){
+      window.location = '/#/';
+    }
+    else{
+      const jsonResponse = await response.json();
+      alert(`Error: ${jsonResponse.message}`);
     }
   }
 

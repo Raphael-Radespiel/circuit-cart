@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../database").databaseConnection;
 const cookieParser = require('cookie-parser');
-const crypto = require("crypto");
 
 router.use(cookieParser());
 
 const {getDateToInt} = require("../utils/DateFunctions");
+const setCookies = require("../utils/SetCookies");
 
 async function confirmValidUserInDatabase(token){
   try{
@@ -69,8 +69,7 @@ router.post("/", async (req, res) => {
       confirmValidUserInDatabase(token);
 
       // Set cookie
-      const sessionID = crypto.randomBytes(32).toString('hex');
-      res.cookie('sessionID', sessionID, { maxAge: 86400000, httpOnly: true });
+      setCookies(res, email);
       
     res.status(201).json({header: "Login Successful", paragraph: "You can now shop in our website. Welcome!"});
   }

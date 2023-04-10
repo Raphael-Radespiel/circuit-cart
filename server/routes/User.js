@@ -1,5 +1,6 @@
 const dotenv = require("dotenv").config().parsed;
 const validation = require("../utils/ServerSideValidation");
+const setCookies = require("../utils/SetCookies");
 
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -120,58 +121,49 @@ function sendVerificationEmail(email, token){
 ///////////
 // LOGIN //
 ///////////
-router.post("/login", async (req, res) => {
+router.post("/login", (req, res) => {
   console.log("CALLED ROUTE USER/LOGIN");
   console.log(req.body);
+  const { password, email } = req.body;
 
   try{
-    const responseStatus = await login(req.body);
+    const userQuery = `SELECT Password, isActive FROM User WHERE Email = ?;`;
+    connection.query(userQuery, [email], async (err, result) => {
+      if(err){
+        throw err;
+      }
 
-    res.status(responseStatus).send();
+      // If the account does not exist 
+      if(result.length == 0){
+        res.status(500).send({ success: false, message: 'Email is not registered'});
+        return;
+      }
+
+      // If the account is not validated
+      if(result[0].isActive == 0){
+        res.status(500).send({ success: false, message: 'Account is not validated'});
+        return;
+      }
+
+      // Compare passwords
+      const isValidPassword = await bcrypt.compare(password, result[0].Password);
+      console.log(isValidPassword);
+
+      if(!isValidPassword){
+        res.status(500).send({ success: false, message: 'Invalid password'});
+        return;
+      }
+
+      // Set cookie
+      setCookies(res, email);
+
+      res.status(201).send();
+    });
   }
   catch(error){
-    console.log(error);
-    res.status(500).send();
+    console.log(error.message);
+    res.status(500).send({success: false, message: error.message, error: error});
   }
 });
-
-async function login(req){
-
-  // REQ must have PASSWORD AND EMAIL
-
-  try{
-    // Get password from user with same email AND isActive is true
-    const query = `SELECT Password FROM User WHERE Email = ? AND isActive = 1;`;
-
-    // await bcrypt.compare(password, database password);
-    // allowed send jwt
-    // not allowed send message
-    //
-    //  DONT MAKE THIS ARRAY LOOPING 
-    //  FIX THE VALIDATE EMAIL AS WELL
-    //
-    connection.query(query, [req.email], async (err, result) => {
-      // TODO: NO NEED FOR MAP MY FRIEND, USE result[0]. ITS JUST AN ARRAY
-      console.log(result);
-      result.map(async (value) => {
-        const isValidPassword = await bcrypt.compare(req.password, value.Password);
-        if(isValidPassword){
-          console.log("Correct Password");
-
-        }
-        else{
-          // Don't log in
-          console.log("Wrong Password");
-        }
-      })
-    });
-  
-  }
-  catch{
-    return 500; 
-  }
- 
-  return 201;
-}
 
 module.exports = router;
