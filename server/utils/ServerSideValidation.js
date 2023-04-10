@@ -55,4 +55,4 @@ function validateLoginForm(data){
 }
 
 
-module.exports = {validateLoginForm, validateSignupForm};
+module.exports = {validateLoginForm, validateSignupForm, validateEmail};

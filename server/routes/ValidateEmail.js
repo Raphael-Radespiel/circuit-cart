@@ -21,13 +21,6 @@ async function confirmValidUserInDatabase(token){
 }
 
 // Validate the email address
-// TODO: 
-// TODO: TODO: I NEED TO TEST THIS MORE. I DONT THINK THE IS VALID WAS CHANGED
-// TODO: YEAH IT WASNT CHANGED
-// IF EVERYTHING GOES WELL, WE SEND THE USER TO THE MAIN PAGE, SET COOKIES
-// IF THE TOKEN WAS EXPIRED, WE SEND THEM TO THE VALIDATION PAGE
-// WITH A BUTTON TO CREATE A NEW TOKEN, AND AN EXPLANATION OF WHAT HAPPENED
-// IF THE TOKEN IS INVALID SEND THEM TO VALIDATION PAGE AND SAY "TOKEN OR EMAIL INVALID"
 router.post("/", async (req, res) => {
   console.log("VALIDATION");
   try{
@@ -45,31 +38,39 @@ router.post("/", async (req, res) => {
       });
     });
 
-      const { VerificationTimeLimit, VerificationToken } = result[0];
+    if(result.length == 0){
+        let error = new Error("Incorrect Email");
+        error.header = "The email in the url token is invalid";
+        error.paragraph = "The email value of the link you entered in the url is not valid. Please check that you did not modify it from the email and try again.";
+        error.canResend = false;
+        throw error; 
+    }
+
+    const { VerificationTimeLimit, VerificationToken } = result[0];
     console.log(token, email);
     console.log(VerificationToken);
 
-      if(VerificationToken != token){
-        let error = new Error("Incorrect Token");
-        error.header = "Your token is invalid";
-        error.paragraph = "The validation token link you entered in the url is not valid. Please check that you did not modify it from the email and try again.";
-        error.canResend = false;
-        throw error; 
-      }
+    if(VerificationToken != token){
+      let error = new Error("Incorrect Token");
+      error.header = "Your token is invalid";
+      error.paragraph = "The validation token link you entered in the url is not valid. Please check that you did not modify it from the email and try again.";
+      error.canResend = false;
+      throw error; 
+    }
 
-      if(VerificationTimeLimit < getDateToInt(new Date())){
-        let error = new Error("Verification Token has expired");
-        error.header = "Your Token has expired";
-        error.paragraph = "The validation token you provided has expired. Please request a new validation token to be sent to your email.";
-        error.canResend = true;
-        throw error; 
-      }
-      
-      // Update user by setting them to Active and deleting their token
-      confirmValidUserInDatabase(token);
+    if(VerificationTimeLimit < getDateToInt(new Date())){
+      let error = new Error("Verification Token has expired");
+      error.header = "Your Token has expired";
+      error.paragraph = "The validation token you provided has expired. Please request a new validation token to be sent to your email.";
+      error.canResend = true;
+      throw error; 
+    }
+    
+    // Update user by setting them to Active and deleting their token
+    confirmValidUserInDatabase(token);
 
-      // Set cookie
-      setCookies(res, email);
+    // Set cookie
+    setCookies(res, email);
       
     res.status(201).json({header: "Login Successful", paragraph: "You can now shop in our website. Welcome!"});
   }

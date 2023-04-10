@@ -166,4 +166,43 @@ router.post("/login", (req, res) => {
   }
 });
 
+router.post("/resend-token", async (req, res) => {
+  try{
+    const email = req.body.email;
+
+    // VALIDATE EMAIL INPUT
+    if(!validation.validateEmail(email)){
+      throw new Error("Invalid input data");
+    }
+    // Create email validation token and 6 minute time limit
+    const { token, verificationTimeLimit } = await createVerificationToken();
+
+    // update values into the database
+    const updateQuery = `UPDATE User 
+    SET VerificationToken = ?, VerificationTimeLimit = ? 
+    WHERE Email = ? AND isActive = 0;`;
+
+    connection.query(updateQuery, [token, verificationTimeLimit, email], (err, result) => {
+      if(err){
+        throw err;
+      }
+
+      // If the account does not exist or is already validated
+      if(result.length == 0){
+        res.status(500).send({ success: false, message: 'Email does not exist or is already validated'});
+        return;
+      }
+
+      // Send out an email with the token
+      sendVerificationEmail(email, token);
+
+      res.status(201).send({message: "Token resent"});
+    });
+  }
+  catch(err){
+    console.log(err.message);
+    res.status(500).send(err.message);
+  }
+});
+
 module.exports = router;
