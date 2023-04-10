@@ -11,7 +11,7 @@ const {getDateToInt} = require("../utils/DateFunctions");
 async function confirmValidUserInDatabase(token){
   try{
     const updateQuery = `UPDATE User 
-    SET isActive = 1, VerificationToken = null
+    SET isActive = 1, VerificationToken = null, VerificationTimeLimit = null
     WHERE VerificationToken = ?;`;
     connection.query(updateQuery, [token], (err) => {throw err});
   } 

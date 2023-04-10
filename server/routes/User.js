@@ -4,14 +4,14 @@ const validation = require("../utils/ServerSideValidation");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
-const router = express.Router();
+const cookieParser = require('cookie-parser');
 const crypto = require("crypto");
 
 const connection = require("../database").databaseConnection;
 
 // TODO: 
 // COOKIE PARSER SHOULD ONLY BE USED IN LOGIN AND VALIDATE EMAIL FUNCTIONS
-const cookieParser = require('cookie-parser');
+const router = express.Router();
 router.use(cookieParser());
 
 const transporter = nodemailer.createTransport({
@@ -106,7 +106,7 @@ function sendVerificationEmail(email, token){
     from: dotenv.EMAIL_USER, 
     to: email, 
     subject: 'Confirmation Token',
-    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/validate?token=${token}&email=${email}">confirm</a></p>`
+    html: `<h1>Your account is almost ready!</h1><p>Click this link to confirm your email:<a href="http://localhost:5000/#/validate?token=${token}&email=${email}">confirm</a></p>`
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
