@@ -14,4 +14,29 @@ function setCookies(res, userEmail){
   });
 }
 
-module.exports = setCookies;
+function removeCookies(email, sessionID, res){
+  const insertQuery = 'UPDATE User SET SessionID = NULL WHERE Email = ? AND SessionID = ?;';
+
+  connection.query(insertQuery, [email, sessionID], (err, result) => {
+    if(err){
+      res.status(500).send();
+      return;
+    }
+    console.log("ox");
+    if(result.length != 0){
+      console.log("FOUND RESULT");
+      res.cookie('sessionID', '', { maxAge: 0, httpOnly: true });
+      res.cookie('email', '', { maxAge: 0, httpOnly: false });
+      res.status(201).send();
+      return;
+    }
+    else{
+      console.log("NO RESULT");
+      res.status(500).send();
+      return;
+    }
+  });
+  
+}
+
+module.exports = {setCookies, removeCookies};

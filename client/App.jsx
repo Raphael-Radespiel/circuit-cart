@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import Navbar from "./components/Navbar"
 import Hamburger from "./components/Hamburger"
@@ -29,18 +29,23 @@ function getCookie(name) {
 function App() {
   const [userSession, setUserSession ]= useState({isLoggedIn: false, isAdmin: false});
 
-  (async function isLoggedIn(){
+  useEffect(() => {
+    isLoggedIn();
+  }, []);
+
+  async function isLoggedIn(){
+    console.log("code ran");
     if(userSession.isLoggedIn){
       return;
     }
 
     if(document.cookie != ""){
       const email = getCookie('email');
-      const response = await fetch(`/validate/session/${email}`, {method: 'GET'});
+      const response = await fetch(`/validate/session/${email}`, {method: 'GET', credentials: "same-origin"});
       const responseJson = await response.json();
       setUserSession(responseJson);
     }
-  })();
+  };
 
   return (
     <>

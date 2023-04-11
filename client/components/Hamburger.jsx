@@ -9,8 +9,8 @@ function Hamburger(props){
     setDropDown(previousBoolean => !previousBoolean);
   }
 
-  function logOutUser(){
-    console.log("Ill write a function to log you out");
+  async function logOutUser(){
+    await fetch(`/user/logout`, {method: 'GET', credentials: "same-origin"});
   }
 
   return(

@@ -1,6 +1,6 @@
 const dotenv = require("dotenv").config().parsed;
 const validation = require("../utils/ServerSideValidation");
-const setCookies = require("../utils/SetCookies");
+const {setCookies, removeCookies} = require("../utils/SetCookies");
 
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -95,9 +95,9 @@ async function createVerificationToken() {
 
 async function insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit){
   let insertQuery = `INSERT INTO User 
-  (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType) 
+  (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType, SessionID) 
   VALUES 
-  (?, ?, ?, 0, ?, ?, 'customer');`;
+  (?, ?, ?, 0, ?, ?, 'customer', null);`;
 
   await connection.query(insertQuery, [email, fullName, hashedPassword, token, verificationTimeLimit]);
 }
@@ -203,6 +203,10 @@ router.post("/resend-token", async (req, res) => {
     console.log(err.message);
     res.status(500).send(err.message);
   }
+});
+
+router.get("/logout", (req,res) => {
+  removeCookies(req.cookies.email, req.cookies.sessionID, res);
 });
 
 module.exports = router;

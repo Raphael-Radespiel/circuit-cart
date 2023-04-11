@@ -82,9 +82,11 @@ router.post("/", async (req, res) => {
 
 router.get("/session/:email", async (req, res) => {
   const email = req.params.email;
-  const query = "SELECT UserType FROM User WHERE Email = ? AND isActive = 1;";
+  const session = req.cookies.sessionID;
+  // if user exists and is active and is signed in
+  const query = "SELECT UserType FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";
   try{
-    connection.query(query, [email], (err, result) => {
+    connection.query(query, [email, session], (err, result) => {
       console.log(result[0]);
       if(err){
         res.status(500).send(err.message);
@@ -92,15 +94,18 @@ router.get("/session/:email", async (req, res) => {
       } 
 
       if(result.length == 0){
+        console.log("Length 0");
         res.status(201).send({isLoggedIn: false, isAdmin: false});
         return; 
       }
 
       if(result[0].UserType == "customer"){
+        console.log("Customer");
         res.status(201).send({isLoggedIn: true, isAdmin: false});
         return; 
       }
 
+        console.log("ADMIN");
         res.status(201).send({isLoggedIn: true, isAdmin: true});
         return; 
     });
