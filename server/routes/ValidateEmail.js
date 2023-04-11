@@ -80,4 +80,35 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/session/:email", async (req, res) => {
+  const email = req.params.email;
+  const query = "SELECT UserType FROM User WHERE Email = ? AND isActive = 1;";
+  try{
+    connection.query(query, [email], (err, result) => {
+      console.log(result[0]);
+      if(err){
+        res.status(500).send(err.message);
+        return;
+      } 
+
+      if(result.length == 0){
+        res.status(201).send({isLoggedIn: false, isAdmin: false});
+        return; 
+      }
+
+      if(result[0].UserType == "customer"){
+        res.status(201).send({isLoggedIn: true, isAdmin: false});
+        return; 
+      }
+
+        res.status(201).send({isLoggedIn: true, isAdmin: true});
+        return; 
+    });
+  }
+  catch (err){
+    console.log(err);
+    res.status(500).send(err.message);
+  }
+});
+
 module.exports = router;

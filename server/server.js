@@ -14,7 +14,6 @@ app.use("/user", userRoute);
 const validateEmailRoute = require('./routes/ValidateEmail');
 app.use("/validate", validateEmailRoute); 
 
-
 app.use("/", express.static(path.join(__dirname, "../client")));
 
 app.get("/*", (_req, res) => {

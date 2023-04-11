@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import Navbar from "./components/Navbar"
 import Hamburger from "./components/Hamburger"
 
@@ -17,19 +19,39 @@ import "./assets/global.css"
 
 import { Route, Routes } from "react-router-dom"
 
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
 function App() {
-  const userSessionStatus = {isLoggedIn: false, isAdmin: false};
+  const [userSession, setUserSession ]= useState({isLoggedIn: false, isAdmin: false});
+
+  (async function isLoggedIn(){
+    if(userSession.isLoggedIn){
+      return;
+    }
+
+    if(document.cookie != ""){
+      const email = getCookie('email');
+      const response = await fetch(`/validate/session/${email}`, {method: 'GET'});
+      const responseJson = await response.json();
+      setUserSession(responseJson);
+    }
+  })();
 
   return (
     <>
       <header>
         <Navbar>
-          <Hamburger {...userSessionStatus}/>
+          <Hamburger {...userSession}/>
         </Navbar>
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<Home {...userSessionStatus}/>}/>
+          <Route path="/" element={<Home {...userSession}/>}/>
 
           <Route path="/search" element={<Search/>}/>
           <Route path="/products" element={<Products/>}/>
