@@ -28,22 +28,29 @@ function getCookie(name) {
 
 function App() {
   const [userSession, setUserSession ]= useState({isLoggedIn: false, isAdmin: false});
+  const [userStatus, setUserStatus] = useState(1);
 
   useEffect(() => {
     isLoggedIn();
   }, []);
 
+  useEffect(() => {
+    isLoggedIn();
+  }, [userStatus]);
+
   async function isLoggedIn(){
     console.log("code ran");
-    if(userSession.isLoggedIn){
-      return;
-    }
 
     if(document.cookie != ""){
       const email = getCookie('email');
       const response = await fetch(`/validate/session/${email}`, {method: 'GET', credentials: "same-origin"});
       const responseJson = await response.json();
+      console.log(responseJson);
       setUserSession(responseJson);
+    }
+    else{
+      console.log("Nothing on cookies");
+      setUserSession({isLoggedIn: false, isAdmin: false});
     }
   };
 
@@ -51,7 +58,7 @@ function App() {
     <>
       <header>
         <Navbar>
-          <Hamburger {...userSession}/>
+          <Hamburger {...userSession} changeUserStatus={setUserStatus}/>
         </Navbar>
       </header>
       <main>
@@ -61,9 +68,9 @@ function App() {
           <Route path="/search" element={<Search/>}/>
           <Route path="/products" element={<Products/>}/>
 
-          <Route path="/login" element={<LogIn/>}/>
+          <Route path="/login" element={<LogIn changeUserStatus={setUserStatus}/>}/>
           <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/validate" element={<Validate/>}/>
+          <Route path="/validate" element={<Validate changeUserStatus={setUserStatus}/>}/>
 
           <Route path="/account" element={<Account/>}/>
           <Route path="/shopping-cart" element={<ShoppingCart/>}/>

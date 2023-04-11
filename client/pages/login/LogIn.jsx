@@ -2,7 +2,7 @@ import {Link} from "react-router-dom"
 import "../../assets/Forms.css"
 import { validateLoginForm } from "../../utils/ClientSideValidation" 
 
-function LogIn(){
+function LogIn({changeUserStatus}){
 
   async function handleLogIn(e){
     console.log('hello');
@@ -39,6 +39,7 @@ function LogIn(){
     let response = await fetch("/user/login", request);
 
     if(response.ok){
+      changeUserStatus((current) => current + 1);
       window.location = '/#/';
     }
     else{

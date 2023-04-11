@@ -22,7 +22,6 @@ function removeCookies(email, sessionID, res){
       res.status(500).send();
       return;
     }
-    console.log("ox");
     if(result.length != 0){
       console.log("FOUND RESULT");
       res.cookie('sessionID', '', { maxAge: 0, httpOnly: true });

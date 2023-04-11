@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useState } from "react";
 import "../assets/Hamburger.css";
 
-function Hamburger(props){
+function Hamburger({isLoggedIn, isAdmin, changeUserStatus}){
   const [isDropDown, setDropDown] = useState(false);
 
   function updateDropDownState(){
@@ -11,11 +11,12 @@ function Hamburger(props){
 
   async function logOutUser(){
     await fetch(`/user/logout`, {method: 'GET', credentials: "same-origin"});
+    changeUserStatus((current) => current+1);
   }
 
   return(
     <>
-      {!props.isLoggedIn ?
+      {!isLoggedIn ?
           (<Link className="react-router-links" to="/login"><button className="login-button">Login</button></Link>) :
       (<div className="hamburger">
         <button onClick={updateDropDownState}>
@@ -33,7 +34,7 @@ function Hamburger(props){
           <div className="middle-divisor"></div>
           <Link className="react-router-links" to="orders">Order History</Link>
           <div className="middle-divisor"></div>
-          {props.isAdmin && (<><Link  className="react-router-links" to="admin-panel">Admin Panel</Link><div className="middle-divisor"></div></>)} 
+          {isAdmin && (<><Link  className="react-router-links" to="admin-panel">Admin Panel</Link><div className="middle-divisor"></div></>)} 
           <Link  className="react-router-links" to="/" onClick={logOutUser}>LogOut</Link>
         </div>)}
       </div>)}
