@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useState } from "react";
-import "../assets/Hamburger.css";
+import "../assets/css/Hamburger.css";
 
 function Hamburger({isLoggedIn, isAdmin, changeUserStatus}){
   const [isDropDown, setDropDown] = useState(false);

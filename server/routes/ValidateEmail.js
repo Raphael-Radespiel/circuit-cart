@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 router.use(cookieParser());
 
 const {getDateToInt} = require("../utils/DateFunctions");
-const setCookies = require("../utils/SetCookies");
+const {setCookies} = require("../utils/SetCookies");
 
 async function confirmValidUserInDatabase(token){
   try{
@@ -66,12 +66,12 @@ router.post("/", async (req, res) => {
       throw error; 
     }
     
-    // Update user by setting them to Active and deleting their token
-    confirmValidUserInDatabase(token);
-
     // Set cookie
     setCookies(res, email);
       
+    // Update user by setting them to Active and deleting their token
+    confirmValidUserInDatabase(token);
+
     res.status(201).json({header: "Login Successful", paragraph: "You can now shop in our website. Welcome!"});
   }
   catch (error){
@@ -80,8 +80,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/session/:email", async (req, res) => {
-  const email = req.params.email;
+router.get("/session", async (req, res) => {
+  const email = req.cookies.email;
   const session = req.cookies.sessionID;
   // if user exists and is active and is signed in
   const query = "SELECT UserType FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";

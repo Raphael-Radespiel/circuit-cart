@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { Route, Routes } from "react-router-dom"
 
 import Navbar from "./components/Navbar"
 import Hamburger from "./components/Hamburger"
@@ -17,39 +18,21 @@ import AdminPanel from "./pages/admin-panel/AdminPanel"
 
 import "./assets/css/global.css"
 
-import { Route, Routes } from "react-router-dom"
-
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
 function App() {
-  const [userSession, setUserSession ]= useState({isLoggedIn: false, isAdmin: false});
-  const [userStatus, setUserStatus] = useState(1);
+  const [userSession, setUserSession] = useState({isLoggedIn: false, isAdmin: false});
 
   useEffect(() => {
     isLoggedIn();
   }, []);
 
-  useEffect(() => {
-    isLoggedIn();
-  }, [userStatus]);
-
   async function isLoggedIn(){
-    console.log("code ran");
-
     if(document.cookie != ""){
-      const email = getCookie('email');
-      const response = await fetch(`/validate/session/${email}`, {method: 'GET', credentials: "same-origin"});
+      const response = await fetch(`/validate/session`, 
+        {method: 'GET', credentials: "same-origin"});
       const responseJson = await response.json();
-      console.log(responseJson);
       setUserSession(responseJson);
     }
     else{
-      console.log("Nothing on cookies");
       setUserSession({isLoggedIn: false, isAdmin: false});
     }
   };
@@ -58,7 +41,7 @@ function App() {
     <>
       <header>
         <Navbar>
-          <Hamburger {...userSession} changeUserStatus={setUserStatus}/>
+          <Hamburger {...userSession} changeUserStatus={isLoggedIn}/>
         </Navbar>
       </header>
       <main>
@@ -68,9 +51,9 @@ function App() {
           <Route path="/search" element={<Search/>}/>
           <Route path="/products" element={<Products/>}/>
 
-          <Route path="/login" element={<LogIn changeUserStatus={setUserStatus}/>}/>
+          <Route path="/login" element={<LogIn changeUserStatus={isLoggedIn}/>}/>
           <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/validate" element={<Validate changeUserStatus={setUserStatus}/>}/>
+          <Route path="/validate" element={<Validate changeUserStatus={isLoggedIn}/>}/>
 
           <Route path="/account" element={<Account/>}/>
           <Route path="/shopping-cart" element={<ShoppingCart/>}/>

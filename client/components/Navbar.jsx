@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import Searchbar from "./Searchbar";
-import "../assets/Navbar.css";
+import "../assets/css/Navbar.css";
 
 function Navbar(props){
   return(

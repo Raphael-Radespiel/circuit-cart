@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import {useState} from "react";
-import "../assets/Searchbar.css";
+import "../assets/css/Searchbar.css";
 
 function Searchbar(){
   const [selectWidth, setSelectWidth] = useState({width: "48px"});
