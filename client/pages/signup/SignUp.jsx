@@ -1,4 +1,4 @@
-import "../../assets/Forms.css"
+import "../../assets/css/Forms.css"
 import { validateSignupForm } from "../../utils/ClientSideValidation" 
 
 function SignUp(){

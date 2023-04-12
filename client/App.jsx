@@ -15,7 +15,7 @@ import Products from "./pages/products/Products"
 import ShoppingCart from "./pages/shopping-cart/ShoppingCart"
 import AdminPanel from "./pages/admin-panel/AdminPanel"
 
-import "./assets/global.css"
+import "./assets/css/global.css"
 
 import { Route, Routes } from "react-router-dom"
 

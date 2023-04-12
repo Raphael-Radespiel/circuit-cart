@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react"
 import ProductListing from "./ProductListing"
-import "../../assets/Home.css"
+import "../../assets/css/Home.css"
 
 function Home(props){
   const [products, setProducts] = useState([{}]);

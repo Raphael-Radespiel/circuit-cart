@@ -1,4 +1,4 @@
-import "../../assets/ProductListing.css"
+import "../../assets/css/ProductListing.css"
 
 function ProductListing({products}){
 
