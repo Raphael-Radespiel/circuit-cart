@@ -38,13 +38,15 @@ function validateSignupForm(data){
 }
 
 function validateLoginForm(data){
-  // Test Email
-  if(!validateEmail(data.email)) return false;
-
-  // Test password
-  if(!validatePassword(data.password)) return false;
-
-  return true;
+  try{
+    // Test Email
+    validateEmail(data.email);
+    // Test password
+    validatePassword(data.password);
+  }
+  catch(error){
+    throw error;
+  }
 }
 
 

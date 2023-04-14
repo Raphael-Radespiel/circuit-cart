@@ -1,21 +1,21 @@
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
+
+import { validateLoginForm } from "../../utils/Validation" 
+import { postRequest } from "../../utils/PostRequest"
+
 import "../../assets/css/Forms.css"
-import { validateLoginForm } from "../../utils/ClientSideValidation" 
 
 function LogIn({getLoginStatus}){
 
   async function handleLogIn(e){
-    console.log('hello');
     e.preventDefault();
 
-    let target = e.target;
+    // GET AND VALIDATE DATA
+    const email = e.target.querySelector("#LOGIN_email").value;
+    const password = e.target.querySelector("#LOGIN_password").value;
 
-    let data = {
-      email: target.querySelector("#LOGIN_email").value,
-      password: target.querySelector("#LOGIN_password").value
-    }
+    let data = {email, password}
 
-    // Validate data 
     try{
       validateLoginForm(data);
     }
@@ -24,48 +24,26 @@ function LogIn({getLoginStatus}){
       return;
     }
 
-    let request = {
-      method: "POST",
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }
-
-    console.log(data);
-    console.log(request);
-
-    let response = await fetch("/user/login", request);
-
-    if(response.ok){
+    await postRequest(data, "/user/login", () => {
       getLoginStatus();
       window.location = '/#/';
-    }
-    else{
-      const jsonResponse = await response.json();
-      alert(`Error: ${jsonResponse.message}`);
-    }
+    });
   }
 
   return (
     <div className="form-component">
       <h2>Login</h2>
-        <form onSubmit={(e) => {handleLogIn(e)}}>
+        <form onSubmit={(e) => handleLogIn(e)}>
           <label htmlFor="LOGIN_email">Email:</label>
-          <input id="LOGIN_email" name="email" type="text"></input>
+          <input id="LOGIN_email" type="text"/>
           <label htmlFor="LOGIN_password">Password:</label>
-          <input id="LOGIN_password" name="password" type="password"></input>
-          <div className="remember-div">
-            <input id="LOGIN_remember" name="remember" type="checkbox"></input>
-            <label htmlFor="LOGIN_remember">Remember me!</label>
-          </div>
-          <input className="primary-button" type="submit" value="submit"></input>
+          <input id="LOGIN_password" type="password"/>
+          <input className="primary-button" type="submit" value="Submit"/>
         </form>
       <div className="form-component__signup-cta">
         <p>Don't have an account yet?</p>
-        <Link to="/signup"> 
-          <button className="secondary-button">Join Now!</button>
+        <Link to="/signup" className="react-router-links secondary-button"> 
+          Join Now!
         </Link>
       </div>
     </div>
