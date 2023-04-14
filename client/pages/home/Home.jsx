@@ -1,30 +1,9 @@
-import {useState, useEffect} from "react"
+import { Link } from "react-router-dom"
 import ProductListing from "./ProductListing"
+
 import "../../assets/css/Home.css"
 
-function Home(props){
-  const [products, setProducts] = useState([{}]);
-
-  const productListingAmount = 4;
-  
-  useEffect(() => {
-    const request = {
-      method: "POST",
-      headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-      body: JSON.stringify({productAmount: productListingAmount})
-    }
-
-    fetch("./randomproducts", request)
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((err) => (console.log(err.message)));
-
-  }, []);
+function Home({isLoggedIn}){
 
   return(
     <>
@@ -35,12 +14,20 @@ function Home(props){
             Build your next project with ease! 
           </h1>
           <p>
-            Our online store offers a vast selection of high-quality electronic components at competitive prices with fast and reliable shipping straight to your door. Hobbyist or professional, we have everything you need to take your projects to the next level, building smarter and faster than ever before.
+            Shop now for high-quality electronic components at competitive prices. Build faster and smarter. Perfect for hobbyists and professionals alike.
           </p>
-          {!props.isLoggedIn ? (<button>Join now!</button>) : (<button>Start building!</button>)}
+          {
+            isLoggedIn ? 
+            (
+              <Link className="react-router-links primary-button" to="/search">Start building!</Link>
+            ) : 
+            (
+              <Link className="react-router-links primary-button" to="/signup">Join now!</Link>
+            )
+          }
         </div>
       </div>
-      <ProductListing products={products}/>
+      <ProductListing amount="4"/>
     </>
   )
 }

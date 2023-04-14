@@ -16,6 +16,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
+  max-width: 25rem;
 }
 
 .hero-text-content h1{
@@ -34,8 +35,8 @@
   text-align: center;
 }
 
-.hero-text-content button{
-  font-size: 1.5rem;
+.hero-text-content .primary-button{
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--clr-accent);
   background-color: var(--clr-primary);
@@ -44,7 +45,7 @@
   padding: 0.75rem 2rem;
 }
 
-.hero-text-content button:hover{
+.hero-text-content .primary-button:hover{
   color: var(--clr-primary);
   background-color: var(--clr-accent);
   cursor: pointer;
@@ -89,12 +90,17 @@
     padding: 1rem 2rem;
     width: 100%;
     align-items: flex-start;
+    max-width: none;
   }
 }
 
 @media (min-width: 69rem){
   .hero-text-content h1{
-    font-size: 4rem;
+    font-size: 3.75rem;
+  }
+
+  .hero-text-content p{
+    font-size: 1rem;
   }  
 }
 

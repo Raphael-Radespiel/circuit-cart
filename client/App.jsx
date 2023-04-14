@@ -46,7 +46,7 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<Home {...userSession}/>}/>
+          <Route path="/" element={<Home isLoggedIn={userSession.isLoggedIn}/>}/>
           <Route path="/search" element={<Search/>}/>
           <Route path="/products" element={<Products/>}/>
           <Route path="/login" element={<LogIn getLoginStatus={getLoginStatus}/>}/>

@@ -1,6 +1,9 @@
+import {useState, useEffect} from "react"
+
 import "../../assets/css/ProductListing.css"
 
-function ProductListing({products}){
+function ProductListing({amount}){
+  const [products, setProducts] = useState([{}]);
 
   function numberToPriceString(num){
     if(num == undefined){
@@ -9,6 +12,24 @@ function ProductListing({products}){
 
     return `R$${num.toFixed(2)}`;
   }
+
+  useEffect(() => {
+    const request = {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+    },
+      body: JSON.stringify({productAmount: amount})
+    }
+
+    fetch("./randomproducts", request)
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((err) => (console.log(err.message)));
+
+  }, []);
 
   return (
       <div className="product-listing-container">

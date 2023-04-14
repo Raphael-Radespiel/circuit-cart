@@ -45,8 +45,8 @@ function Hamburger({isLoggedIn, isAdmin, getLoginStatus}){
 
   if(!isLoggedIn){
     return (
-      <Link className="react-router-links" to="/login">
-        <button className="login-button">Login</button>
+      <Link className="react-router-links login-button" to="/login">
+        Login
       </Link>
     )
   }
