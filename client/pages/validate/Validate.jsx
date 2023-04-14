@@ -6,7 +6,7 @@ function getQueryParam(param) {
   return returnVal === null ? "" : returnVal[1];
 }
 
-function Validate({changeUserStatus}){
+function Validate({getLoginStatus}){
   const [validationState, setValidationState] = useState({canResend: false, h2Text: "Please check your email!", pText: "We have sent you a verification token so that we know your email is legitimate."});
   const emailInput = useRef(null);
 
@@ -41,7 +41,7 @@ function Validate({changeUserStatus}){
       if(response.ok){
         const {paragraph, header, canResend} = jsonResponse;
         setValidationState({pText: paragraph, h2Text: header, canResend: canResend});
-        changeUserStatus((current) => current+1);
+        getLoginStatus();
       }
       else{
         const {paragraph, header, canResend} = jsonResponse.error;

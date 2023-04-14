@@ -22,10 +22,10 @@ function App() {
   const [userSession, setUserSession] = useState({isLoggedIn: false, isAdmin: false});
 
   useEffect(() => {
-    isLoggedIn();
+    getLoginStatus();
   }, []);
 
-  async function isLoggedIn(){
+  async function getLoginStatus(){
     if(document.cookie != ""){
       const response = await fetch(`/validate/session`, 
         {method: 'GET', credentials: "same-origin"});
@@ -41,25 +41,21 @@ function App() {
     <>
       <header>
         <Navbar>
-          <Hamburger {...userSession} changeUserStatus={isLoggedIn}/>
+          <Hamburger {...userSession} getLoginStatus={getLoginStatus}/>
         </Navbar>
       </header>
       <main>
         <Routes>
           <Route path="/" element={<Home {...userSession}/>}/>
-
           <Route path="/search" element={<Search/>}/>
           <Route path="/products" element={<Products/>}/>
-
-          <Route path="/login" element={<LogIn changeUserStatus={isLoggedIn}/>}/>
+          <Route path="/login" element={<LogIn getLoginStatus={getLoginStatus}/>}/>
           <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/validate" element={<Validate changeUserStatus={isLoggedIn}/>}/>
-
+          <Route path="/validate" element={<Validate getLoginStatus={getLoginStatus}/>}/>
           <Route path="/account" element={<Account/>}/>
           <Route path="/shopping-cart" element={<ShoppingCart/>}/>
           <Route path="/orders" element={<Orders/>}/>
           <Route path="/checkout" element={<CheckOut/>}/>
-
           <Route path="/admin-panel" element={<AdminPanel/>}/>
         </Routes>
       </main>
