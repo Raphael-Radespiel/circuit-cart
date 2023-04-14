@@ -13,7 +13,7 @@ async function confirmValidUserInDatabase(token){
     const updateQuery = `UPDATE User 
     SET isActive = 1, VerificationToken = null, VerificationTimeLimit = null
     WHERE VerificationToken = ?;`;
-    connection.query(updateQuery, [token], (err) => {throw err});
+    await connection.query(updateQuery, [token], (err) => {throw err});
   } 
   catch(error){
     throw error;
@@ -68,11 +68,13 @@ router.post("/", async (req, res) => {
     
     // Set cookie
     setCookies(res, email);
+    console.log("Cookie set");
       
     // Update user by setting them to Active and deleting their token
     confirmValidUserInDatabase(token);
+    console.log("Confirm valid user");
 
-    res.status(201).json({header: "Login Successful", paragraph: "You can now shop in our website. Welcome!"});
+    res.status(201).send();
   }
   catch (error){
     console.log(error.message);
@@ -83,6 +85,7 @@ router.post("/", async (req, res) => {
 router.get("/session", async (req, res) => {
   const email = req.cookies.email;
   const session = req.cookies.sessionID;
+
   // if user exists and is active and is signed in
   const query = "SELECT UserType FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";
   try{

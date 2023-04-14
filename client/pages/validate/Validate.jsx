@@ -1,62 +1,25 @@
-import { useState, useEffect, useRef } from "react";
-
-function getQueryParam(param) {
-  const rx = new RegExp("[?&]" + param + "=([^&]+).*$");
-  const returnVal = String(window.location).match(rx);
-  return returnVal === null ? "" : returnVal[1];
-}
+import { useState, useEffect } from "react";
 
 function Validate({getLoginStatus}){
-  const [validationState, setValidationState] = useState({canResend: false, h2Text: "Please check your email!", pText: "We have sent you a verification token so that we know your email is legitimate."});
-  const emailInput = useRef(null);
+  const [validationState, setValidationState] = useState({canResend: false, h2Text: "Please check your email!", pText: "We have sent you a verification token."});
+
+  function getQueryParam(param) {
+    const rx = new RegExp("[?&]" + param + "=([^&]+).*$");
+    const returnVal = String(window.location).match(rx);
+    return returnVal === null ? "" : returnVal[1];
+  }
 
   const email = getQueryParam('email');
   const token = getQueryParam('token');
 
-  // TODO: 
-  // PUT A TIME LIMIT SERVER SIDE ON THE RESEND TOKEN FUNCTION
   useEffect(() => {
-    (async function getCorrectText(){
-      if(email.length == 0 || token.length == 0){
-        return;
-      }
-
-      let data = {
-        email: email,
-        token: token
-      }
-       
-      let request = {
-        method: "POST",
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      }
-
-      let response = await fetch("/validate", request);
-      const jsonResponse = await response.json();
-
-      if(response.ok){
-        const {paragraph, header, canResend} = jsonResponse;
-        setValidationState({pText: paragraph, h2Text: header, canResend: canResend});
-        getLoginStatus();
-      }
-      else{
-        const {paragraph, header, canResend} = jsonResponse.error;
-        setValidationState({pText: paragraph, h2Text: header, canResend: canResend});
-      }
-    })();
-  }, []);
-
-  async function resendToken(){
-    const emailValue = emailInput.current.value;
-    
-    // VALIDATE THE EMAIL
+    if(email.length == 0 || token.length == 0){
+      return;
+    }
 
     let data = {
-      email: emailValue
+      email: email,
+      token: token
     }
      
     let request = {
@@ -68,9 +31,32 @@ function Validate({getLoginStatus}){
       body: JSON.stringify(data)
     }
 
-    let response = await fetch("/user/resend-token", request);
-    
-    console.log("Hello");
+    fetch("/validate", request)
+      .then(response => {
+        if(response.ok){
+          getLoginStatus();
+          window.location = "/#/";
+        }
+        else{
+          return response.json()
+        }
+      })
+      .then(jsonResponse => {
+        console.log(jsonResponse);
+        const {paragraph, header, canResend} = jsonResponse.error;
+        setValidationState({pText: paragraph, h2Text: header, canResend: canResend});
+      });
+  }, []);
+
+  function resendToken(){
+    fetch("/user/resend-token", {
+      method: "POST",
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: email})
+    });
   }
 
   
@@ -78,12 +64,11 @@ function Validate({getLoginStatus}){
     <div className="validation-container">
       <h2>{validationState.h2Text}</h2>
       <p>{validationState.pText}</p>
-      {validationState.canResend && 
-          (<>
-            <input ref={emailInput} type="text" placeholder="email">
-            </input>
-            <button onClick={resendToken}className="secondary-button">Resend the token</button>
-          </>)
+      {
+        validationState.canResend && 
+          (
+            <button onClick={resendToken} className="secondary-button">Resend the token</button>
+          )
       }
     </div>
   )

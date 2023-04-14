@@ -8,7 +8,6 @@ async function postRequest(data, serverRoute, callback){
       body: JSON.stringify(data)
     }
 
-    // MAKE REQUEST AND HANDLE RESPONSE 
     let response = await fetch(serverRoute, request);
 
     if(response.ok){
