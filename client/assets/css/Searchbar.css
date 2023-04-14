@@ -32,16 +32,19 @@
   stroke: var(--clr-accent);
 }
 
-.filtered-search button{
+.filtered-search .search-button{
   background-color: transparent;
   border: none;
   height: 100%;
+  align-items: center;
+  display: flex;
 }
 
 @media (min-width: 54rem){
   .filtered-search{
     margin-left: initial;
     width: 50%;
+    min-width: 26.5rem;
   }
 
   .filtered-search select{
@@ -56,13 +59,13 @@
     display: block;
   }
 
-  .filtered-search button{
+  .filtered-search .search-button{
     padding: 0rem 1rem;
     border-radius: 0 15px 15px 0;
     background-color: var(--clr-accent);
   }
 
-  .filtered-search button:hover{
+  .filtered-search .search-button:hover{
     background-color: var(--clr-primary);
     cursor: pointer;
   }
