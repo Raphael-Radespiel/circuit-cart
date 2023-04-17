@@ -13,8 +13,8 @@ function Hamburger({isLoggedIn, isAdmin, getLoginStatus}){
     setDropDown(previousBoolean => !previousBoolean);
   }
 
-  async function logOutUser(){
-    await fetch(`/user/logout`, {method: 'GET', credentials: "same-origin"});
+  function logOutUser(){
+    fetch(`/user/logout`, {method: 'GET', credentials: "same-origin"});
     getLoginStatus();
   }
 

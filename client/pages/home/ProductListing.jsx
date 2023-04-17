@@ -22,7 +22,7 @@ function ProductListing({amount}){
       body: JSON.stringify({productAmount: amount})
     }
 
-    fetch("./randomproducts", request)
+    fetch("./products", request)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

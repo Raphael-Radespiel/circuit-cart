@@ -7,8 +7,8 @@ const path = require("path");
 const connection = require("./database").databaseConnection;
 
 // ROUTES
-const randomProductsRoute = require('./routes/RandomProducts');
-app.use("/randomproducts", randomProductsRoute); 
+const productsRoute = require('./routes/Products');
+app.use("/products", productsRoute); 
 const userRoute = require('./routes/User');
 app.use("/user", userRoute); 
 const validateEmailRoute = require('./routes/ValidateEmail');
