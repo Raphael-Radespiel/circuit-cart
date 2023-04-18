@@ -23,11 +23,9 @@ router.post("/", (req, res) => {
       const queryString = `SELECT Title, Price, ImageFile 
       FROM Products WHERE ProductID IN (${formatedArray.join(', ')});`;
 
-      queryDatabase(queryString)
-        .then(productResult => res.status(201).send(productResult))
-        .catch(error => res.status(500).send(error));
-
+      return queryDatabase(queryString)
     })
+    .then(productResult => res.status(201).send(productResult))
     .catch(error => res.status(500).send(error));
 });
 
