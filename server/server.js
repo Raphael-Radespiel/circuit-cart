@@ -13,6 +13,8 @@ const userRoute = require('./routes/User');
 app.use("/user", userRoute); 
 const validateEmailRoute = require('./routes/ValidateEmail');
 app.use("/validate", validateEmailRoute); 
+const searchRoute = require('./routes/Search');
+app.use("/search", searchRoute); 
 
 app.use("/", express.static(path.join(__dirname, "../client")));
 
