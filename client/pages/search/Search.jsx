@@ -29,29 +29,25 @@ function Search({searchQuery}){
     fetchSearchResult();
   }, [searchQuery]);
 
-  // TURN THIS INTO A REGULAR IF ELSE RENDER
-  function renderSearchResults(){
-    if(searchResults.order.length == 0){
-      return (
+  if(searchResults.order.length == 0){
+    return (
+      <div className="search-container">
         <h1>NO RESULT FOUND</h1>
-      )
-    }
-
-    return searchResults.order.map((id) => {
-      const value = searchResults.result.find(item => item.ProductID === id);
-      return (
-        <Product key={value.ProductID} {...value}/>
-      )
-    })
+      </div>
+    )
   }
-
-  return (
-    <div className="search-container">
-      {
-        renderSearchResults()
-      }
-    </div>
-  )
+  else{
+    return (
+      <div className="search-container">
+        {
+          searchResults.order.map((id) => {
+            const value = searchResults.result.find(item => item.ProductID === id);
+            return (<Product key={value.ProductID} {...value}/>)
+          })
+        }
+      </div>
+    )
+  }
 }
 
 
