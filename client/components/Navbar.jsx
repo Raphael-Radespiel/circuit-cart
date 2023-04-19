@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import Searchbar from "./Searchbar";
 import "../assets/css/Navbar.css";
 
 function Navbar(props){
@@ -8,7 +7,6 @@ function Navbar(props){
       <Link className="react-router-links" to="/">
         <h1 className="no-select">C i r c u i t C a r t</h1>
       </Link>
-      <Searchbar/>
       {props.children}
     </nav>
   )

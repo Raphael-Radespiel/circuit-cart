@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 
 import Navbar from "./components/Navbar"
+import Searchbar from "./components/Searchbar";
 import Hamburger from "./components/Hamburger"
 
 import Home from "./pages/home/Home"
@@ -20,6 +21,7 @@ import "./assets/css/global.css"
 
 function App() {
   const [userSession, setUserSession] = useState({isLoggedIn: false, isAdmin: false});
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getLoginStatus();
@@ -37,17 +39,22 @@ function App() {
     }
   };
 
+  function fetchSearch(queryString){
+    setSearchQuery(queryString);
+  }
+
   return (
     <>
       <header>
         <Navbar>
+          <Searchbar fetchSearch={fetchSearch}/>
           <Hamburger {...userSession} getLoginStatus={getLoginStatus}/>
         </Navbar>
       </header>
       <main>
         <Routes>
           <Route path="/" element={<Home isLoggedIn={userSession.isLoggedIn}/>}/>
-          <Route path="/search" element={<Search/>}/>
+          <Route path="/search" element={<Search searchQuery={searchQuery}/>}/>
           <Route path="/products" element={<Products/>}/>
           <Route path="/login" element={<LogIn getLoginStatus={getLoginStatus}/>}/>
           <Route path="/signup" element={<SignUp/>}/>
