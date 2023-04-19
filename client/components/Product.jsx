@@ -1,3 +1,5 @@
+import "../assets/css/Product.css"
+
 function Product({Title, Price, ProductID, ImageFile, AmountInStock}){
   function numberToPriceString(num){
     if(num == undefined){
@@ -8,12 +10,12 @@ function Product({Title, Price, ProductID, ImageFile, AmountInStock}){
   }
 
   return (
-    <div>
+    <div className="product-container" id={ProductID}>
       <img src={"../assets/images/" + ImageFile}/>
       <div>
         <h2>{Title}</h2>
-        <p>Amount: {AmountInStock}</p> 
-        <p>{numberToPriceString(Price)}</p>
+        <p className="product-container__price">{numberToPriceString(Price)}</p>
+        <p className="product-container__amount">Amount: {AmountInStock}</p> 
       </div>
     </div>
   )

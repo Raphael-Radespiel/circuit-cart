@@ -27,7 +27,7 @@ function Home({isLoggedIn}){
           }
         </div>
       </div>
-      <ProductListing amount="4"/>
+      <ProductListing amount="6"/>
     </>
   )
 }

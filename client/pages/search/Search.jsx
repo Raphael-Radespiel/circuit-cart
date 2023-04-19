@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Product from "../../components/Product"
 
+import "../../assets/css/Search.css"
+
 function Search({searchQuery}){
   const [searchResults, setSearchResults] = useState({result: [], order: []});
 
@@ -44,7 +46,7 @@ function Search({searchQuery}){
   }
 
   return (
-    <div>
+    <div className="search-container">
       {
         renderSearchResults()
       }

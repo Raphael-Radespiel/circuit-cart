@@ -1,0 +1,23 @@
+.search-container{
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 2rem; 
+  justify-content: center; 
+  background-color: var(--clr-secondary);
+  border-radius: 15px;
+  padding: 3rem 1rem;
+  max-width: 60rem;
+  margin: 0rem 1rem;
+}
+
+@media (min-width: 36rem){
+  .search-container{
+    margin: 0rem 3rem;
+  }
+}
+
+@media (min-width: 76rem){
+  .search-container{
+    margin: auto;
+  }
+}
