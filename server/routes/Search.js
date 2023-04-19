@@ -72,7 +72,7 @@ function getProductOrderFromSearch(result, searchTerm){
 
 function getQueryStringFromSearchOrder(orderArray){
   return `SELECT 
-  Title, ProductID, Description, Price, ImageFile, AmountInStock
+  Title, ProductID, Price, ImageFile, AmountInStock
   FROM Products 
   WHERE ProductID IN (${orderArray.join(', ')});`;
 }

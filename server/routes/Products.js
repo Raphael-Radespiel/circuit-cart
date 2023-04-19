@@ -20,7 +20,7 @@ router.post("/", (req, res) => {
       let formatedArray = JSON.parse(JSON.stringify(rowPacketArray))
         .map(value => value.ProductID);
 
-      const queryString = `SELECT Title, Price, ImageFile 
+      const queryString = `SELECT Title, Price, ImageFile, AmountInStock, ProductID
       FROM Products WHERE ProductID IN (${formatedArray.join(', ')});`;
 
       return queryDatabase(queryString)

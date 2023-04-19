@@ -8,10 +8,14 @@ import "../assets/css/Searchbar.css";
 function Searchbar({fetchSearch}){
   const [selectWidth, setSelectWidth] = useState({width: "48px"});
   const [searchColor, setSearchColor] = useState({color: "#F2E7D335"});
+  const [searchLink, setSearchLink] = useState("/search");
 
   const filterRef = useRef("");
   const inputRef = useRef("");
 
+  useEffect(() => {
+    setSearchLink(`/search?filter=${filterRef.current.value}&search=${inputRef.current.value}`);
+  }, [filterRef.current.value, inputRef.current.value]);
 
   // Calculate an approximate width for select box based on value selected
   function updateSelectWidth(e){
@@ -40,7 +44,7 @@ function Searchbar({fetchSearch}){
         <option value="kit">Kits</option> 
       </select>
       <input type="text" ref={inputRef} style={searchColor} placeholder="Search for Components" onChange={e => updateSearchColor(e)}/>
-      <Link className="react-router-links search-button" onClick={() => fetchSearch({filter: filterRef.current.value, search: inputRef.current.value})} to="./search">
+      <Link className="react-router-links search-button" onClick={() => fetchSearch({filter: filterRef.current.value, search: inputRef.current.value})} to={searchLink}>
         <SearchIcon width="27" height="27"/>
       </Link>
     </div>
