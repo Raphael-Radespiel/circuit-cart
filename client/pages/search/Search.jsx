@@ -30,6 +30,13 @@ function Search(){
   }, []);
 
   function renderSearchResults(){
+
+    if(searchResults.order.length == 0){
+      return (
+        <h1>NO RESULT FOUND</h1>
+      )
+    }
+
     return searchResults.order.map((id) => {
       const value = searchResults.result.find(item => item.ProductID === id);
       console.log(value);

@@ -16,13 +16,22 @@ router.get("/", (req, res) => {
       const searchOrder = getProductOrderFromSearch(result, req.query.search);
       const queryString = getQueryStringFromSearchOrder(searchOrder);
 
-      connection.query(queryString, (err, result) => {
-        if(err){
-          res.status(201).send(err);
-        }
+      console.log(searchOrder);
+      console.log(queryString);
 
-        res.status(201).send({result, order: searchOrder});
-      });
+      if(searchOrder.length != 0){ 
+        console.log("WHY");
+        connection.query(queryString, (err, result) => {
+          if(err){
+            res.status(201).send(err);
+          }
+
+          res.status(201).send({result, order: searchOrder});
+        });
+      }
+      else{
+        res.status(201).send({result: [], order: []});
+      }
     });
   }
   else{
@@ -34,13 +43,22 @@ router.get("/", (req, res) => {
       const searchOrder = getProductOrderFromSearch(result, req.query.search);
       const queryString = getQueryStringFromSearchOrder(searchOrder);
 
-      connection.query(queryString, (err, result) => {
-        if(err){
-          res.status(201).send(err);
-        }
+      console.log(searchOrder);
+      console.log(queryString);
 
-        res.status(201).send({result, order: searchOrder});
-      });
+      if(searchOrder.length != 0){ 
+        console.log("WHY");
+        connection.query(queryString, (err, result) => {
+          if(err){
+            res.status(201).send(err);
+          }
+
+          res.status(201).send({result, order: searchOrder});
+        });
+      }
+      else{
+        res.status(201).send({result: [], order: []});
+      }
     });
   }
 });
@@ -60,8 +78,3 @@ function getQueryStringFromSearchOrder(orderArray){
 }
 
 module.exports = router;
-
-
-/*
-
- */
