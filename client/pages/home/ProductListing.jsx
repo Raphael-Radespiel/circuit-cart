@@ -37,7 +37,7 @@ function ProductListing({amount}){
           products.map((value, index) => {
             return (
               <div key={index} className="product-listing__item">
-                <img src={"../../assets/images/" + value.ImageFile}></img>
+                <img src={"../../assets/images/" + value.ImageFile}/>
                 <div className="product-listing__content">
                   <h2>{value.Title}</h2>
                   <p>{numberToPriceString(value.Price)}</p>
