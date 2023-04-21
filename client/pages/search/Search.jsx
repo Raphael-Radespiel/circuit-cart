@@ -26,7 +26,6 @@ function Search({searchQuery}){
   if(searchResults.order.length == 0){
     return (
       <div className="search-container">
-        <h1>NO RESULT FOUND</h1>
       </div>
     )
   }
