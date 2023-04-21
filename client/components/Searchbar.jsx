@@ -36,12 +36,12 @@ function Searchbar({fetchSearch}){
     <div className="filtered-search">
       <select defaultValue="all" ref={filterRef} style={selectWidth} onChange={e => updateSelectWidth(e)}>
         <option value="all">All</option>
-        <option value="component">Componentes</option>          
-        <option value="accessory">Acessórios</option>
-        <option value="prototyping">Prototipagem</option> 
-        <option value="tool">Ferramentas</option> 
-        <option value="motor">Motores</option> 
-        <option value="kit">Kits</option> 
+        <option value="component">Component</option>          
+        <option value="accessory">Accessory</option>
+        <option value="prototyping">Prototyping</option> 
+        <option value="tool">Tool</option> 
+        <option value="motor">Motor</option> 
+        <option value="kit">Kit</option> 
       </select>
       <input type="text" ref={inputRef} style={searchColor} placeholder="Search for Components" onChange={e => updateSearchColor(e)}/>
       <Link className="react-router-links search-button" onClick={() => fetchSearch({filter: filterRef.current.value, search: inputRef.current.value})} to={searchLink}>

@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import Product from "../../components/Product"
+import {getQueryParam} from "../../utils/getQueryParam"
 
 import "../../assets/css/Search.css"
 
 function Search({searchQuery}){
   const [searchResults, setSearchResults] = useState({result: [], order: []});
-
-  // THIS WILL HAVE TO BE A UTIL FUNCTION BECAUSE VALIDATE.jsx USES IT
-  function getQueryParam(param) {
-    const rx = new RegExp("[?&]" + param + "=([^&]+).*$");
-    const returnVal = String(window.location).match(rx);
-    return returnVal === null ? "" : returnVal[1];
-  } 
 
   useEffect(() => {
     async function fetchSearchResult(){

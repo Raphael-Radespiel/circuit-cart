@@ -1,4 +1,4 @@
-const { validation } = require("../utils/ServerSideValidation");
+const { validateLoginForm, validateSignupForm, validateEmail } = require("../utils/ServerSideValidation");
 const { setCookies, removeCookies } = require("../utils/SetCookies");
 const { getDateToInt } = require("../utils/DateFunctions");
 const { queryDatabase } = require("../utils/DatabaseUtil");
@@ -59,7 +59,7 @@ async function signup(req){
     console.log(req);
 
     // Check if input data is valid
-    if(!validation.validateSignupForm(req)){
+    if(!validateSignupForm(req)){
       throw new Error("Invalid input data");
     }
 
@@ -170,7 +170,7 @@ router.post("/resend-token", (req, res) => {
   const email = req.body.email;
 
   // VALIDATE EMAIL INPUT
-  if(!validation.validateEmail(email)){
+  if(!validateEmail(email)){
     res.status(500).send({ success: false, message: "Invalid Input Data"});
   }
 

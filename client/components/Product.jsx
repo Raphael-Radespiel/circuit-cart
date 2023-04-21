@@ -9,6 +9,7 @@ function Product({Title, Price, ProductID, ImageFile, AmountInStock}){
     return `$${num.toFixed(2)}`;
   }
 
+  // MAKE THIS A LINK THAT WHEN CLICKED GOES TO THE PRODUCT PAGE AND HAS THE ID AS A QUERY PARAMETER
   return (
     <div className="product-container" id={ProductID}>
       <img src={"../assets/images/" + ImageFile}/>

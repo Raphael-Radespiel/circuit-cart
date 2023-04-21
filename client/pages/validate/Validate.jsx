@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
+import {getQueryParam} from "../../utils/getQueryParam"
 
 function Validate({getLoginStatus}){
   const [validationState, setValidationState] = useState({canResend: false, h2Text: "Please check your email!", pText: "We have sent you a verification token."});
-
-  function getQueryParam(param) {
-    const rx = new RegExp("[?&]" + param + "=([^&]+).*$");
-    const returnVal = String(window.location).match(rx);
-    return returnVal === null ? "" : returnVal[1];
-  }
 
   const email = getQueryParam('email');
   const token = getQueryParam('token');
