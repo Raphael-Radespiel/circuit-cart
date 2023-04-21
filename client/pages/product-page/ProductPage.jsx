@@ -1,4 +1,9 @@
 import { useState, useEffect } from "react";
+
+import ProductListing from "../home/ProductListing"
+
+import "../../assets/css/ProductPage.css"
+
 import {getQueryParam} from "../../utils/getQueryParam"
 
 function Products(){
@@ -39,22 +44,24 @@ function Products(){
   }, []);
 
   return (
-    <div>
-      <img src={"../../assets/images/"+ product.ImageFile}/>
-      <div>
-        <h1>{product.Title}</h1>
-        <p>{product.Description}</p>
-        <div>
-          <p>{numberToPriceString(product.Price * amount)}</p>
-          <div>
-            <button onClick={subtractAmount}>-</button>
-            <p>{String(product.AmountInStock * amount)}</p>
-            <button onClick={addAmount}>+</button>
-          </div>
+    <>
+      <div className="product-page__container">
+        <img className="product-page__image" src={"../../assets/images/"+ product.ImageFile}/>
+        <div className="product-page__text-content">
+          <h2>{product.Title}</h2>
+          <p>{product.Description}</p>
+          <p className="product-price">{numberToPriceString(product.Price * amount)}</p>
+          <p>Amount:</p>
+            <div className="amount-button-container">
+              <button onClick={subtractAmount}>-</button>
+              <p>{String(product.AmountInStock * amount)}</p>
+              <button onClick={addAmount}>+</button>
+            </div>
+          <button className="add-to-cart">Add to Cart!</button>
         </div>
-        <button>Add to Cart!</button>
       </div>
-    </div>
+      <ProductListing amount="3"/>
+    </>
   )
 }
 
