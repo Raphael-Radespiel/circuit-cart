@@ -18,7 +18,7 @@ connection.connect((err) => {
   // 0 = run db 
   // 1 = run db & set new schema 
   // 2 = run db, set new schema & populate database 
-  let databaseMode = 0;
+  let databaseMode = 2;
 
   if(databaseMode != 0){
     // RESET
@@ -130,71 +130,75 @@ function populateProducts(){
 
     ('Crystal Oscillator Set', 'This set of crystal oscillators includes different frequencies and packages, making it suitable for use in clock circuits, microcontrollers, and other timing applications where precise frequency control is required.', 20, 'component', 8, 'crystal-oscillator-set.png'),
 
-    ('ESD-Safe Storage Containers', 'These containers are designed to store electronic components safely, protecting them from static electricity and environmental damage.', 1, 'accessory', 15, 'esd-container.png'),
+    ('ESD-Safe Storage Containers', 'These containers are designed to store electronic components safely, protecting them from static electricity and environmental damage.', 1, 'accessory', 15, 'placeholder.png'),
 
-    ('ESD-Safe Mat', 'This mat helps to prevent static electricity from damaging electronic components and provides a safe work surface for assembling and testing circuits.', 1, 'accessory', 15, 'esd-mat.png'),
+    ('ESD-Safe Mat', 'This mat helps to prevent static electricity from damaging electronic components and provides a safe work surface for assembling and testing circuits.', 1, 'accessory', 15, 'placeholder.png'),
 
-    ('Heat Shrink Tubing Assortment', 'This assortment includes heat shrink tubing of various sizes and colors, ideal for insulating and protecting wires and connections in electronic circuits.', 160, 'accessory', 20, 'heat-shrink-tube.png'),
+    ('Heat Shrink Tubing Assortment', 'This assortment includes heat shrink tubing of various sizes and colors, ideal for insulating and protecting wires and connections in electronic circuits.', 160, 'accessory', 20, 'placeholder.png'),
 
-    ('Helping Hands', 'These adjustable alligator clip stands with magnifying glass and LED light are perfect for holding components in place while soldering or working on intricate electronic projects.', 1, 'accessory', 12, 'helping-hands.png'),
+    ('Helping Hands', 'These adjustable alligator clip stands with magnifying glass and LED light are perfect for holding components in place while soldering or working on intricate electronic projects.', 1, 'accessory', 12, 'placeholder.png'),
 
-    ('ESD Anti-Static Wrist Strap', 'This wrist strap helps protect sensitive electronic components from electrostatic discharge (ESD), ensuring safe handling during assembly, testing, and repair tasks.', 1, 'accessory', 8, 'esd-strap.png'),
+    ('ESD Anti-Static Wrist Strap', 'This wrist strap helps protect sensitive electronic components from electrostatic discharge (ESD), ensuring safe handling during assembly, testing, and repair tasks.', 1, 'accessory', 8, 'placeholder.png'),
 
-    ('Component Storage Box', 'This organizer box with multiple compartments is perfect for storing and sorting small electronic components such as resistors, capacitors, and diodes, keeping them organized and easily accessible.', 1, 'accessory', 13, 'storage-box.png'),
+    ('Component Storage Box', 'This organizer box with multiple compartments is perfect for storing and sorting small electronic components such as resistors, capacitors, and diodes, keeping them organized and easily accessible.', 1, 'accessory', 13, 'placeholder.png'),
 
-    ('Soldering Flux', 'This flux facilitates soldering by improving solder flow and reducing oxidation, making it essential for achieving high-quality solder joints in electronic assemblies.', 1, 'accessory', 6, 'soldering-flux.png'),
+    ('Soldering Flux', 'This flux facilitates soldering by improving solder flow and reducing oxidation, making it essential for achieving high-quality solder joints in electronic assemblies.', 1, 'accessory', 6, 'placeholder.png'),
+
+    ('Anti-Static Wrist Strap', 'This strap helps to prevent static electricity from damaging electronic components during handling or assembly.', 1, 'accessory', 8, 'placeholder.png'),
 
     ('Battery Holder', 'This holder is designed to securely hold batteries of various sizes, providing a reliable power source for electronic circuits or DIY projects.', 1, 'accessory', 3, 'battery-holder.png'),
 
-    ('Breadboard', 'This classic prototyping tool allows for quick and easy circuit assembly without soldering, making it ideal for experimenting and testing electronic circuits.', 1, 'prototyping', 6, 'breadboard.png'),
+    ('Breadboard', 'This classic prototyping tool allows for quick and easy circuit assembly without soldering, making it ideal for experimenting and testing electronic circuits.', 1, 'prototyping', 6, 'placeholder.png'),
 
-    ('Jumper Wires', 'This set of male-to-male, female-to-female, and male-to-female jumper wires provides flexibility for making connections on breadboards or PCBs, facilitating circuit building and testing.', 120, 'prototyping', 5, 'jumper-wires.png'),
+    ('Jumper Wires', 'This set of male-to-male, female-to-female, and male-to-female jumper wires provides flexibility for making connections on breadboards or PCBs, facilitating circuit building and testing.', 120, 'prototyping', 5, 'placeholder.png'),
     
-    ('Perfboard', 'This versatile prototyping board features a grid of holes for soldering components, making it suitable for creating custom circuit layouts and prototypes.', 1, 'prototyping', 3, 'perfboard.png'),
+    ('Prototype PCB', 'These blank printed circuit boards come in various sizes and configurations, allowing for custom circuit design and fabrication for prototyping purposes.', 1, 'prototyping', 8, 'placeholder.png'),
     
-    ('Prototyping Shield for Arduino', 'This shield fits on top of an Arduino board, providing a convenient prototyping area with soldering pads and headers for adding custom circuits and components.', 1, 'prototyping', 10, 'arduino-shield.png'),
+    ('Perfboard', 'This versatile prototyping board features a grid of holes for soldering components, making it suitable for creating custom circuit layouts and prototypes.', 1, 'prototyping', 3, 'placeholder.png'),
     
-    ('IC Socket Assortment', 'This assortment includes various sizes of IC sockets, providing a convenient way to easily insert, remove, and replace integrated circuits during prototyping or testing.', 1, 'prototyping', 7, 'ic-socket.png'),
+    ('Prototyping Shield for Arduino', 'This shield fits on top of an Arduino board, providing a convenient prototyping area with soldering pads and headers for adding custom circuits and components.', 1, 'prototyping', 10, 'placeholder.png'),
     
-    ('Prototype Enclosure', 'This enclosure provides a protective and organized housing for a custom prototype circuit, allowing for easy testing and development.', 1, 'prototyping', 13, 'enclosure.png'),
+    ('IC Socket Assortment', 'This assortment includes various sizes of IC sockets, providing a convenient way to easily insert, remove, and replace integrated circuits during prototyping or testing.', 1, 'prototyping', 7, 'placeholder.png'),
+    
+    ('Prototype Enclosure', 'This enclosure provides a protective and organized housing for a custom prototype circuit, allowing for easy testing and development.', 1, 'prototyping', 13, 'placeholder.png'),
 
-    ('Desoldering Pump', 'This tool allows for easy removal of solder from circuit boards and components, making it essential for repair and rework tasks.', 1, 'tool', 6, 'desoldering-pump.png'),
+    ('Desoldering Pump', 'This tool allows for easy removal of solder from circuit boards and components, making it essential for repair and rework tasks.', 1, 'tool', 6, 'placeholder.png'),
 
-    ('Multimeter', 'This versatile tool measures voltage, current, resistance, and other electrical parameters, making it essential for troubleshooting, testing, and debugging electronic circuits.', 1, 'tool', 12, 'multimeter.png'),
+    ('Multimeter', 'This versatile tool measures voltage, current, resistance, and other electrical parameters, making it essential for troubleshooting, testing, and debugging electronic circuits.', 1, 'tool', 12, 'placeholder.png'),
 
-    ('Wire Stripper', 'This tool is used for removing the insulation from wires, making it easier to solder and connect components.', 1, 'tool', 7, 'wire-stripper.png'),
+    ('Wire Stripper', 'This tool is used for removing the insulation from wires, making it easier to solder and connect components.', 1, 'tool', 7, 'placeholder.png'),
 
-    ('Tweezers Set', 'This set includes various types of tweezers, such as straight, curved, and pointed tips, which are useful for handling small electronic components.', 1, 'tool', 6, 'tweezer-set.png'),
+    ('Tweezers Set', 'This set includes various types of tweezers, such as straight, curved, and pointed tips, which are useful for handling small electronic components.', 1, 'tool', 6, 'placeholder.png'),
 
-    ('Flush Cutter', 'This tool is used for cleanly cutting leads, wires, and other small parts in electronic circuits.', 1, 'tool', 7, 'flush-cutter.png'),
+    ('Flush Cutter', 'This tool is used for cleanly cutting leads, wires, and other small parts in electronic circuits.', 1, 'tool', 7, 'placeholder.png'),
 
-    ('Soldering Station', 'This handy soldering station has all the tools you will ever need to repair and build electronic circuits.', 1, 'tool', 24, 'soldering-station.png'),
+    ('PCB Ruler', 'This handy tool is designed with printed measurements, guides, and reference information for quick and accurate circuit board layout and measurement.', 1, 'tool', 4, 'placeholder.png'),
 
-    ('Heat Gun', 'This tool is used for applying heat to shrink tubing, remove adhesives, or activate heat-sensitive components.', 1, 'tool', 16, 'heat-gun.png'),
+    ('Heat Gun', 'This tool is used for applying heat to shrink tubing, remove adhesives, or activate heat-sensitive components.', 1, 'tool', 16, 'placeholder.png'),
 
-    ('PCB Cleaning Brush', 'This brush is specifically designed for cleaning circuit boards and components, helping to remove dust, dirt, and debris.', 1, 'tool', 3, 'pcb-brush.png'),
+    ('PCB Cleaning Brush', 'This brush is specifically designed for cleaning circuit boards and components, helping to remove dust, dirt, and debris.', 1, 'tool', 3, 'placeholder.png'),
 
-    ('Precision Screwdriver Set', 'This set includes various sizes and types of screwdrivers, suitable for disassembling and assembling electronic devices.', 1, 'tool', 10, 'screwdriver-set.png'),
+    ('Precision Screwdriver Set', 'This set includes various sizes and types of screwdrivers, suitable for disassembling and assembling electronic devices.', 1, 'tool', 10, 'placeholder.png'),
 
-    ('PCB Holder', 'This tool provides a stable and adjustable platform for holding and positioning circuit boards during soldering or testing.', 1, 'tool', 10, 'pcb-holder.png'),
+    ('PCB Holder', 'This tool provides a stable and adjustable platform for holding and positioning circuit boards during soldering or testing.', 1, 'tool', 10, 'placeholder.png'),
 
-    ('Arduino Starter Kit', 'This kit includes an Arduino board, various sensors, actuators, and other components for beginners to learn and experiment with Arduino-based projects.', 1, 'kit', 70, 'arduino-kit.png'),
+    ('Arduino Starter Kit', 'This kit includes an Arduino board, various sensors, actuators, and other components for beginners to learn and experiment with Arduino-based projects.', 1, 'kit', 70, 'placeholder.png'),
 
-    ('Raspberry Pi Kit', 'This kit includes a Raspberry Pi board, power supply, SD card, and other accessories for building projects with Raspberry Pi, a popular single-board computer.', 1, 'kit', 100, 'raspberry-pi-kit.png'),
+    ('Raspberry Pi Kit', 'This kit includes a Raspberry Pi board, power supply, SD card, and other accessories for building projects with Raspberry Pi, a popular single-board computer.', 1, 'kit', 100, 'placeholder.png'),
 
-    ('Electronics Learning Kit', 'This kit is designed for beginners to learn and experiment with electronics, providing a variety of components, a breadboard, and instructional materials for building and testing circuits.', 1, 'kit', 35, 'learning-kit.png'),
+    ('Electronics Learning Kit', 'This kit is designed for beginners to learn and experiment with electronics, providing a variety of components, a breadboard, and instructional materials for building and testing circuits.', 1, 'kit', 35, 'placeholder.png'),
 
-    ('DIY Synth Kit', 'This kit includes components and instructions for building a DIY synthesizer, allowing users to learn about sound synthesis and create their own electronic music.', 1, 'kit', 65, 'synth-kit.png'),
+    ('DIY Synth Kit', 'This kit includes components and instructions for building a DIY synthesizer, allowing users to learn about sound synthesis and create their own electronic music.', 1, 'kit', 65, 'placeholder.png'),
 
     ('Solar Power Kit', 'This kit includes components such as solar panels, charge controller, battery, and other accessories for building a solar-powered system, allowing users to learn about renewable energy and build their own solar projects.', 1, 'kit', 125, 'solar-cell.png'),
 
-    ('Audio Amplifier Kit', 'This kit includes components for building an audio amplifier, providing an opportunity to learn about audio electronics and build their own audio projects, such as speakers or headphone amplifiers.', 1, 'kit', 35, 'amp-kit.png'),
+    ('Audio Amplifier Kit', 'This kit includes components for building an audio amplifier, providing an opportunity to learn about audio electronics and build their own audio projects, such as speakers or headphone amplifiers.', 1, 'kit', 35, 'placeholder.png'),
 
-    ('FM Radio Kit', 'This kit includes components for building an FM radio receiver, allowing users to learn about radio electronics and listen to their favorite FM stations.', 1, 'kit', 20, 'fm-radio-kit.png'),
+    ('FM Radio Kit', 'This kit includes components for building an FM radio receiver, allowing users to learn about radio electronics and listen to their favorite FM stations.', 1, 'kit', 20, 'placeholder.png'),
 
-    ('Electronic Dice Kit', 'This kit includes components for building an electronic dice, a fun and educational project that involves assembling and programming a device that simulates rolling dice.', 1, 'kit', 25, 'dice-kit.png'),
+    ('Electronic Dice Kit', 'This kit includes components for building an electronic dice, a fun and educational project that involves assembling and programming a device that simulates rolling dice.', 1, 'kit', 25, 'placeholder.png'),
 
-    ('DIY Oscilloscope Kit', 'This kit includes components for building a DIY oscilloscope, a commonly used tool in electronics for measuring and visualizing electrical signals, providing an opportunity to learn about oscilloscope operation and circuitry.', 1, 'kit', 100, 'oscilloscope-kit.png'),
+    ('DIY Oscilloscope Kit', 'This kit includes components for building a DIY oscilloscope, a commonly used tool in electronics for measuring and visualizing electrical signals, providing an opportunity to learn about oscilloscope operation and circuitry.', 1, 'kit', 100, 'placeholder.png'),
 
     ('DC Motor', 'This motor is commonly used in electronic projects for various applications, such as robotics, automation, and motorized devices.', 1, 'motor', 3, 'dc-motor.jpg'),
 
