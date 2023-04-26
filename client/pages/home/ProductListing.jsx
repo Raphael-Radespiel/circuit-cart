@@ -3,7 +3,7 @@ import Product from "../../components/Product"
 
 import "../../assets/css/ProductListing.css"
 
-function ProductListing({amount}){
+function ProductListing(props){
   const [products, setProducts] = useState([{}]);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ function ProductListing({amount}){
       headers: {
       "Content-Type": "application/json",
     },
-      body: JSON.stringify({productAmount: amount})
+      body: JSON.stringify({productAmount: props.amount})
     }
 
     fetch("./products", request)
@@ -22,7 +22,7 @@ function ProductListing({amount}){
       })
       .catch((err) => (console.log(err.message)));
 
-  }, []);
+  }, [props.forceRenderProp]);
 
   return (
       <div className="product-listing-container">
