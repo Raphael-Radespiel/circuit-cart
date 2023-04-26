@@ -6,6 +6,7 @@ import ProductListing from "../home/ProductListing"
 import "../../assets/css/ProductPage.css"
 
 import {getQueryParam} from "../../utils/getQueryParam"
+import CartIcon from "../../assets/icons/CartIcon"
 
 // TODO:
 // MAKE VIEW CART INTO A REACT-ROUTER-DOM LINK
@@ -81,7 +82,7 @@ function Products(){
           {
             isOnCart ?
             (
-                <button className="add-to-cart" onClick={addToCart}>View Cart</button>
+              <button className="view-cart" onClick={addToCart}><CartIcon width="30" height="30"/>View Cart</button>
             )
             :
             (

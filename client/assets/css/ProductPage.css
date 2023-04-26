@@ -69,6 +69,7 @@
   font-size: 1.25rem;
 }
 
+.view-cart,
 .add-to-cart{
   background-color: var(--clr-primary);
   border: none;
@@ -80,10 +81,28 @@
   margin: auto;
 }
 
+.view-cart:hover,
 .add-to-cart:hover{
   background-color: var(--clr-accent);
   color: var(--clr-primary);
   cursor: pointer;
+}
+
+.view-cart{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  width: 50%;
+  gap: 1rem;
+}
+
+.view-cart svg{
+  fill: var(--clr-accent);
+}
+
+.view-cart:hover svg{
+  fill: var(--clr-primary);
 }
 
 @media (min-width: 36rem){
@@ -108,6 +127,7 @@
     max-width: 45%;
   }
 
+  .view-cart,
   .add-to-cart, 
   .amount-button-container{
     margin: 0;
