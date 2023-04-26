@@ -7,18 +7,13 @@ import "../../assets/css/ProductPage.css"
 
 import {getQueryParam} from "../../utils/getQueryParam"
 
-// TODO: 
-// REMOVE QUERYING OF THE PRODUCT ID
-// IN FACT, JUST REMOVE THE QUERYING AND URL CHANGING IN GENERAL? NO, NOT REALLY, ITS USEFUL FOR
-// GOING BACK AND FORTH
-// I NEED TO MAKE IT SO THAT WHEN WE CHANGE PAGES IT RELOADS THE PRODUCT LISTING
 // TODO:
-// JUST MAKE IT UPDATE THE PRODUCT LISTING WHEN WE UPDATE OUR 
-// DATA
+// MAKE VIEW CART INTO A REACT-ROUTER-DOM LINK
 function Products(){
   const [product, setProduct] = useState({});
   const [amount, setAmount] = useState(1);
   const [forceRender, setForceRender] = useState(false);
+  const [isOnCart, setIsOnCart] = useState(false);
 
   const location = useLocation();
 
@@ -55,10 +50,20 @@ function Products(){
       setAmount(1);
       window.scrollTo(0,0);
       setForceRender(value => !value);
+
+      // Update the product based on if it is in the ShoppingCart 
+      const sessionCartItem = sessionStorage.getItem(jsonResult[0].Title);
+      setIsOnCart(!!sessionCartItem);
+      setAmount(sessionCartItem ? JSON.parse(sessionCartItem).amount : 1);
     }
 
     fetchProductData();
   }, [location]);
+
+  function addToCart(){
+    sessionStorage.setItem(product.Title, JSON.stringify({...product, amount: amount}));
+    setIsOnCart(true);
+  }
 
   return (
     <>
@@ -73,7 +78,16 @@ function Products(){
             <p>{String(product.AmountInStock * amount)}</p>
             <button onClick={addAmount}>+</button>
           </div>
-          <button className="add-to-cart">Add to Cart!</button>
+          {
+            isOnCart ?
+            (
+                <button className="add-to-cart" onClick={addToCart}>View Cart</button>
+            )
+            :
+            (
+              <button className="add-to-cart" onClick={addToCart}>Add to Cart!</button>
+            )
+          }  
         </div>
       </div>
       <ProductListing forceRenderProp={forceRender} amount="3"/>
