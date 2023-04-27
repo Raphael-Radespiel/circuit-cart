@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
 });
 
 router.get("/from-id", (req, res) => {
-  queryDatabase("SELECT Title, Price, AmountInStock, ImageFile, Description FROM Products WHERE ProductID = ?;", [req.query.id])
+  queryDatabase("SELECT Title, ProductID, Price, AmountInStock, ImageFile, Description FROM Products WHERE ProductID = ?;", [req.query.id])
     .then(result => res.status(201).send(result))
     .catch(error => res.status(500).send(error));
 });
