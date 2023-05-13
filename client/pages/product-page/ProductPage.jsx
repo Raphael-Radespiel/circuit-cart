@@ -84,7 +84,7 @@ function Products(){
             (
               <div className="on-cart__button-container">
                 <button className="add-to-cart" onClick={addToCart}>Update Cart!</button>
-                <Link to="/shopping-cart" className="react-router-links view-cart" onClick={addToCart}><CartIcon width="30" height="30"/>View Cart</Link>
+                <Link to="/shopping-cart" className="react-router-links view-cart"><CartIcon width="30" height="30"/>View Cart</Link>
             </div>
             )
             :
