@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../../assets/css/ShoppingCart.css"
 
 function ShoppingCart(){
   const [shoppingCartItems, setShoppingCartItems] = useState([{}]);
@@ -60,18 +61,20 @@ function ShoppingCart(){
       {
         shoppingCartItems.map((value, index) => {
           return(
-            <div key={index}>
+            <div key={index} className="shopping-cart__item">
               <img src={"../../assets/images/" + value.ImageFile}></img>
-              <div>
-                <h1>{value.Title}</h1> 
-                <div>
+              <div className="shopping-cart__text-content">
+                <div className="shopping-cart__text-value-div">
+                  <h1>{value.Title}</h1> 
                   <p>{numberToPriceString(value.Price * value.amount)}</p>
-                  <div> 
+                </div>
+                <div className="shopping-cart__button-div">
+                  <div className="shopping-cart__amount-button-container"> 
                     <button onClick={() => subtractAmount(value.ProductID)}>-</button>
                     <p>{String(value.AmountInStock * value.amount)}</p>
                     <button onClick={() => addAmount(value.ProductID)}>+</button>
-                    <button onClick={() => removeFromCart(value.Title)}>Remove from Cart</button>
                   </div>
+                  <button onClick={() => removeFromCart(value.Title)}>X</button>
                 </div>
               </div>
             </div>
