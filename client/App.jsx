@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import Searchbar from "./components/Searchbar";
 import Hamburger from "./components/Hamburger"
+import Footer from "./components/Footer"
 
 import Home from "./pages/home/Home"
 import Search from "./pages/search/Search"
@@ -58,6 +59,7 @@ function App() {
           <Route path="/shopping-cart" element={<ShoppingCart/>}/>
         </Routes>
       </main>
+      <Footer/>
     </>
   )
 }

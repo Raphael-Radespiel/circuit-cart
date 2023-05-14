@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../database").databaseConnection;
-const {queryDatabase} = require("../utils/DatabaseUtil");
 const cookieParser = require('cookie-parser');
 
 router.use(cookieParser());

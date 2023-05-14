@@ -17,11 +17,6 @@ function validatePassword(password){
 }
 
 function validateSignupForm(data){
-  // Test Name
-  if(data.fullName == ""){
-    throw new Error("Empty string as full name");
-  }
-
   try{
     // Test Email
     validateEmail(data.email);

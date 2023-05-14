@@ -24,12 +24,6 @@ function validatePassword(password){
 }
 
 function validateSignupForm(data){
-  // Test Name
-  if(data.fullName == ""){
-    console.log("Sorry, your name is not an empty string");
-    return false;
-  }
-
   // Test Email
   if(!validateEmail(data.email)) return false;
 

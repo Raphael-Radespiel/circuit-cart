@@ -8,12 +8,11 @@ function SignUp(){
     e.preventDefault();
 
     // GET AND VALIDATE DATA
-    const fullName = e.target.querySelector("#SIGNUP_full-name").value;
     const email = e.target.querySelector("#SIGNUP_email").value;
     const password = e.target.querySelector("#SIGNUP_password").value;
     const confirmedPassword = e.target.querySelector("#SIGNUP_password-confirmation").value;
     
-    let data = {fullName, email, password, confirmedPassword}
+    let data = {email, password, confirmedPassword}
 
     try{
       validateSignupForm(data);
@@ -32,8 +31,6 @@ function SignUp(){
     <div className="form-component">
       <h2>Signup</h2>
         <form onSubmit={(e) => {handleSignUp(e)}}>
-          <label htmlFor="SIGNUP_full-name">Your full name:</label>
-          <input id="SIGNUP_full-name" type="text"/>
           <label htmlFor="SIGNUP_email">Email:</label>
           <input id="SIGNUP_email" type="text"/>
           <label htmlFor="SIGNUP_password">Password:</label>

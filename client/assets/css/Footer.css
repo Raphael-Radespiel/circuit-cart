@@ -1,0 +1,23 @@
+footer{
+  padding: 2rem;
+}
+
+footer h1{
+  color: var(--clr-primary);
+  background-color: var(--clr-accent);
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-weight: 900;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  width: fit-content;
+  margin: 0 auto 1rem;
+}
+
+footer p{
+  margin: auto;
+  width: fit-content;
+  color: var(--clr-light);
+}

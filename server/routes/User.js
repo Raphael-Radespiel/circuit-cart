@@ -55,7 +55,7 @@ router.post("/signup", async (req, res) => {
 
 async function signup(req){
   try{
-    const { fullName, email, password} = req;
+    const { email, password} = req;
     console.log(req);
 
     // Check if input data is valid
@@ -69,7 +69,7 @@ async function signup(req){
     const { token, verificationTimeLimit } = createVerificationToken();
 
     // insert our values into the database
-    insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit);
+    insertUserIntoDatabase(email, hashedPassword, token, verificationTimeLimit);
 
     // Send out an email with the token
     sendVerificationEmail(email, token);
@@ -93,13 +93,13 @@ function createVerificationToken() {
   return { token, verificationTimeLimit };
 }
 
-function insertUserIntoDatabase(email, fullName, hashedPassword, token, verificationTimeLimit){
+function insertUserIntoDatabase(email, hashedPassword, token, verificationTimeLimit){
   let insertQuery = `INSERT INTO User 
-  (Email, FullName, Password, isActive, VerificationToken, VerificationTimeLimit, UserType, SessionID) 
+  (Email, Password, isActive, VerificationToken, VerificationTimeLimit, UserType, SessionID) 
   VALUES 
-  (?, ?, ?, 0, ?, ?, 'customer', null);`;
+  (?, ?, 0, ?, ?, 'customer', null);`;
 
-  queryDatabase(insertQuery, [email, fullName, hashedPassword, token, verificationTimeLimit])
+  queryDatabase(insertQuery, [email, hashedPassword, token, verificationTimeLimit])
     .catch(err => console.log(err));
 }
 

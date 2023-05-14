@@ -69,7 +69,6 @@ function setUserSchema(){
     CREATE TABLE User (
       ID int NOT NULL AUTO_INCREMENT,
       Email varchar(320) NOT NULL,
-      FullName varchar(400) NOT NULL,
       Password text NOT NULL, 
       isActive boolean NOT NULL,
       VerificationToken varchar(64),
