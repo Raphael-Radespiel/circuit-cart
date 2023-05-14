@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom"
 import "../../assets/css/ShoppingCart.css"
 
 function ShoppingCart({isLoggedIn}){
@@ -73,7 +74,12 @@ function ShoppingCart({isLoggedIn}){
           )
         })
       }
-      
+      {
+        isLoggedIn ?
+          (<button className="checkout-button">Checkout!</button>) 
+          :
+          (<Link className="react-router-links checkout-button" to="/login">Log In to Checkout</Link>)
+      }
     </div>
   )
 }
