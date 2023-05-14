@@ -28,8 +28,6 @@ function Products(){
     }
   }
 
-  // TODO:
-  // MAKE THIS A UTIL FUNCTION
   function numberToPriceString(num){
     if(num == undefined){
       return null;
@@ -52,17 +50,54 @@ function Products(){
       window.scrollTo(0,0);
       setForceRender(value => !value);
 
-      // Update the product based on if it is in the ShoppingCart 
-      const sessionCartItem = sessionStorage.getItem(jsonResult[0].Title);
-      setIsOnCart(!!sessionCartItem);
-      setAmount(sessionCartItem ? JSON.parse(sessionCartItem).amount : 1);
+      // Update the product based on if it is in the ShoppingCart and how many are in the cart
+      // If there isnt an item return
+      const storageArray = sessionStorage.getItem("ShoppingCart") ? JSON.parse(sessionStorage.getItem("ShoppingCart")) : [];
+
+      let indexFound = storageArray.findIndex((elem) => {
+        return elem.Title == jsonResult[0].Title;
+      });
+
+      if(indexFound != -1){
+        setIsOnCart(true);
+        setAmount(storageArray[indexFound].amount);
+      }
+      else{
+        setIsOnCart(false);
+        setAmount(1);
+      }
     }
 
     fetchProductData();
   }, [location]);
 
   function addToCart(){
-    sessionStorage.setItem(product.Title, JSON.stringify({...product, amount: amount}));
+    // GET shoppingCart in sessionStorage
+    const storageArray = sessionStorage.getItem("ShoppingCart") ? JSON.parse(sessionStorage.getItem("ShoppingCart")) : [];
+
+    // If there is no ShoppingCart item in session Storage
+    // create one and populate it with our current product
+    if(!storageArray){
+      sessionStorage.setItem("ShoppingCart", JSON.stringify([{...product, amount: amount}]));
+      return;
+    }
+
+    // Find index of product in ShoppingCart item
+    let result = storageArray.findIndex((elem) => {
+      return elem.Title == product.Title;
+    });
+
+    // If Product is in storageArray update it
+    // else we push it into the array
+    if(result != -1){
+      storageArray.splice(result, 1, {...product, amount: amount});
+      sessionStorage.setItem("ShoppingCart", JSON.stringify(storageArray));
+    }
+    else{
+      storageArray.push({...product, amount: amount});
+      sessionStorage.setItem("ShoppingCart", JSON.stringify(storageArray));
+    }
+
     setIsOnCart(true);
   }
 

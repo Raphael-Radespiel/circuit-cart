@@ -56,7 +56,7 @@ function App() {
           <Route path="/login" element={<LogIn getLoginStatus={getLoginStatus}/>}/>
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/validate" element={<Validate getLoginStatus={getLoginStatus}/>}/>
-          <Route path="/shopping-cart" element={<ShoppingCart/>}/>
+          <Route path="/shopping-cart" element={<ShoppingCart isLoggedIn={userSession.isLoggedIn}/>}/>
         </Routes>
       </main>
       <Footer/>

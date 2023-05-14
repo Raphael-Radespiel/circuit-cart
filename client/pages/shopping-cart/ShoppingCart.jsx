@@ -1,21 +1,12 @@
 import { useState, useEffect } from "react";
 import "../../assets/css/ShoppingCart.css"
 
-function ShoppingCart(){
+function ShoppingCart({isLoggedIn}){
   const [shoppingCartItems, setShoppingCartItems] = useState([{}]);
 
   useEffect(() => {
-
-    let shoppingCartArray = [];
-    let keys = Object.keys(sessionStorage);
-
-    for(let key of keys) {
-      shoppingCartArray.push(JSON.parse(sessionStorage.getItem(key)));
-    }
-
+    const shoppingCartArray = sessionStorage.getItem("ShoppingCart") ? JSON.parse(sessionStorage.getItem("ShoppingCart")) : [];
     setShoppingCartItems(shoppingCartArray);
-    console.log(shoppingCartArray);
-
   }, []);
 
   // TODO: Extract the repeated code and make it cleaner
@@ -25,7 +16,7 @@ function ShoppingCart(){
 
     if(shoppingCartClone[indexOfId].amount > 1){
       shoppingCartClone[indexOfId].amount--;
-      sessionStorage.setItem(shoppingCartClone[indexOfId].Title, JSON.stringify(shoppingCartClone[indexOfId]));
+      sessionStorage.setItem("ShoppingCart", JSON.stringify(shoppingCartClone));
       setShoppingCartItems(shoppingCartClone);
     }
   }
@@ -35,7 +26,7 @@ function ShoppingCart(){
     let indexOfId = shoppingCartClone.findIndex((value) => value.ProductID == id);
 
     shoppingCartClone[indexOfId].amount++;
-    sessionStorage.setItem(shoppingCartClone[indexOfId].Title, JSON.stringify(shoppingCartClone[indexOfId]));
+    sessionStorage.setItem("ShoppingCart", JSON.stringify(shoppingCartClone));
     setShoppingCartItems(shoppingCartClone);
   }
 
@@ -43,8 +34,9 @@ function ShoppingCart(){
     let shoppingCartClone = [...shoppingCartItems];
     let indexOfId = shoppingCartClone.findIndex((value) => value.Title == productKey);
 
-    sessionStorage.removeItem(productKey);
     shoppingCartClone.splice(indexOfId, 1);
+
+    sessionStorage.setItem("ShoppingCart", JSON.stringify(shoppingCartClone));
     setShoppingCartItems(shoppingCartClone);
   }
 
@@ -81,6 +73,7 @@ function ShoppingCart(){
           )
         })
       }
+      
     </div>
   )
 }
