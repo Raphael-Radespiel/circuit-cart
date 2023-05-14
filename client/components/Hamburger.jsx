@@ -6,7 +6,7 @@ import CogIcon from "../assets/icons/CogIcon"
 
 import "../assets/css/Hamburger.css";
 
-function Hamburger({isLoggedIn, isAdmin, getLoginStatus}){
+function Hamburger({isLoggedIn, getLoginStatus}){
   const [isDropDown, setDropDown] = useState(false);
 
   function updateDropDownState(){
@@ -21,23 +21,8 @@ function Hamburger({isLoggedIn, isAdmin, getLoginStatus}){
   function renderDropdownLinks(){
     return(
       <div className="hamburger-dropdown" onClick={updateDropDownState}>
-        <Link className="react-router-links" to="account">Account</Link>
-        <div className="middle-divisor"></div>
         <Link className="react-router-links" to="shopping-cart">Shopping Cart</Link>
         <div className="middle-divisor"></div>
-        <Link className="react-router-links" to="orders">Order History</Link>
-        <div className="middle-divisor"></div>
-        {
-          isAdmin && 
-          ( 
-            <>
-              <Link  className="react-router-links" to="admin-panel">
-                Admin Panel
-              </Link>
-              <div className="middle-divisor"></div>
-            </>
-          )
-        } 
         <Link  className="react-router-links" to="/" onClick={logOutUser}>LogOut</Link>
       </div>
     )
