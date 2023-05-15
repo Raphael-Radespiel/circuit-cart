@@ -9,6 +9,8 @@ import "../assets/css/Hamburger.css";
 function Hamburger({isLoggedIn, getLoginStatus}){
   const [isDropDown, setDropDown] = useState(false);
 
+  const hasItemsOnCart = sessionStorage.getItem("ShoppingCart");
+
   function updateDropDownState(){
     setDropDown(previousBoolean => !previousBoolean);
   }
@@ -21,8 +23,15 @@ function Hamburger({isLoggedIn, getLoginStatus}){
   function renderDropdownLinks(){
     return(
       <div className="hamburger-dropdown" onClick={updateDropDownState}>
-        <Link className="react-router-links" to="shopping-cart">Shopping Cart</Link>
-        <div className="middle-divisor"></div>
+        {
+        hasItemsOnCart && 
+          (
+          <>
+            <Link className="react-router-links" to="shopping-cart">Shopping Cart</Link>
+            <div className="middle-divisor"></div>
+          </>
+          )
+        }
         <Link  className="react-router-links" to="/" onClick={logOutUser}>LogOut</Link>
       </div>
     )

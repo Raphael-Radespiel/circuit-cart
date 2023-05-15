@@ -5,6 +5,10 @@ import "../../assets/css/ShoppingCart.css"
 function ShoppingCart({isLoggedIn}){
   const [shoppingCartItems, setShoppingCartItems] = useState([{}]);
 
+  if(!sessionStorage.getItem("ShoppingCart")){
+    window.location = "./";
+  }
+
   useEffect(() => {
     const shoppingCartArray = sessionStorage.getItem("ShoppingCart") ? JSON.parse(sessionStorage.getItem("ShoppingCart")) : [];
     setShoppingCartItems(shoppingCartArray);
@@ -37,7 +41,13 @@ function ShoppingCart({isLoggedIn}){
 
     shoppingCartClone.splice(indexOfId, 1);
 
-    sessionStorage.setItem("ShoppingCart", JSON.stringify(shoppingCartClone));
+    if(shoppingCartClone.length > 0){
+      sessionStorage.setItem("ShoppingCart", JSON.stringify(shoppingCartClone));
+    }
+    else{
+      sessionStorage.removeItem("ShoppingCart");
+    }
+
     setShoppingCartItems(shoppingCartClone);
   }
 
