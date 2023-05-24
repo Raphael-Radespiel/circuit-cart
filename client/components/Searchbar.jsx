@@ -5,13 +5,27 @@ import SearchIcon from "../assets/icons/SearchIcon"
 
 import "../assets/css/Searchbar.css";
 
+// UNDER 54REM 
+// CHANGE SEARCHBAR THINGS
+
 function Searchbar({fetchSearch}){
   const [selectWidth, setSelectWidth] = useState({width: "48px"});
   const [searchColor, setSearchColor] = useState({color: "#F2E7D335"});
   const [searchLink, setSearchLink] = useState("/search");
+  const [searchType, setSearchType] = useState("desktop");
 
   const filterRef = useRef("");
   const inputRef = useRef("");
+
+  const WINDOW_BREAKPOINT = 864;
+  window.addEventListener("resize", () => {
+    if(window.innerWidth < WINDOW_BREAKPOINT && searchType != "mobile"){
+      setSearchType("mobile");
+    }
+    else if(window.innerWidth >= WINDOW_BREAKPOINT && searchType != "desktop"){
+      setSearchType("desktop");
+    }
+  });
 
   useEffect(() => {
     setSearchLink(`/search?filter=${filterRef.current.value}&search=${inputRef.current.value}`);

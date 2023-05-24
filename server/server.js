@@ -19,6 +19,7 @@ app.use("/search", searchRoute);
 app.use("/", express.static(path.join(__dirname, "../client")));
 
 app.get("/*", (_req, res) => {
+  console.log("request was made");
   res.sendFile(path.join(__dirname, "../client", "index.html"));
 })
 
@@ -32,5 +33,7 @@ app.listen(PORT, () => {
 process.on('exit', () => {
   console.log('About to close');
   // THROW ERRORS IN FUNCTION
-  connection.end(); 
+  connection.end((err) => {
+    console.log(err);
+  }); 
 });

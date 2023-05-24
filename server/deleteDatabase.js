@@ -13,8 +13,16 @@ connection.connect((err) => {
   if(err){
     throw err;
   }
-  console.log("MySQL connected");
+
+  try{
+    connection.query("DROP TABLE User;", (err) => {
+      if(err) console.log(err);
+    });
+    connection.query("DROP TABLE Products;", (err) => {
+      if(err) console.log(err);
+    });
+  }
+  catch(err){
+    console.log(err);
+  }
 });
-
-exports.databaseConnection = connection;
-

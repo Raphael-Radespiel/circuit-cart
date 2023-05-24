@@ -8,7 +8,9 @@
     "kill": "concurrently 'npx kill-port 5173' 'npx kill-port 5000'",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node ./server/server.js"
+    "start": "node ./server/server.js",
+    "deleteDB": "node ./server/deleteDatabase.js",
+    "populateDB": "node ./server/populateDatabase.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

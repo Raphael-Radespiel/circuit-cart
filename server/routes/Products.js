@@ -11,6 +11,7 @@ function getRandomItemsFromArray(arr, amount){
 }
 
 router.post("/", (req, res) => {
+  console.log("this was called");
   const productAmount = req.body.productAmount;
 
   queryDatabase("SELECT ProductID FROM Products;")
