@@ -35,8 +35,8 @@ function SignUp(){
           <input id="SIGNUP_email" type="text"/>
           <label htmlFor="SIGNUP_password">Password:</label>
           <input id="SIGNUP_password" type="password"/>
-          <p>password must have a minimum of 8 characters</p>
-          <label htmlFor="SIGNUP_password-confirmation">Confirm your password:</label>
+          <p>8 character minimum</p>
+          <label htmlFor="SIGNUP_password-confirmation">Confirm password:</label>
           <input id="SIGNUP_password-confirmation" type="password"/>
           <input className="primary-button" type="submit" value="continue"/>
         </form>

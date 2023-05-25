@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   background-color: var(--clr-light);
-  margin: 0rem 1rem;
+  margin: 2rem auto;
   border-radius: 15px;
-  padding: 2rem 2rem;
+  padding: 4rem 2rem;
   align-items: center;
   gap: 2rem;
-  max-width: 34rem;
+  max-width: 20rem;
 }
 
 .form-component h2{
@@ -78,25 +78,32 @@
   color: var(--clr-accent);
 }
 
-.validation-form{
+.validation-container{
   display: flex;
   flex-direction: column;
   background-color: var(--clr-light);
-  margin: 0rem 1rem;
+  margin: 2rem auto;
   border-radius: 15px;
-  padding: 2rem 2rem;
+  padding: 4rem 2rem;
   align-items: center;
-  max-width: 34rem;
+  max-width: 26rem;
+  gap: 2rem;
 }
 
-.validation-form h2{
-  margin-bottom: 2rem;
+.validation-container h2{
+  text-align: center;
   font-size: 2rem;
   color: var(--clr-dark);
 }
 
+.validation-container p{
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--clr-dark);
+}
+
 @media (min-width: 36rem){
-  .form-component, .validation-form{
-    margin: 0 auto;
+  .form-component, .validation-container{
+    margin: 2rem auto;
   }
 }
