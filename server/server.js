@@ -9,13 +9,17 @@ const connection = require("./database").databaseConnection;
 // ROUTES
 const productsRoute = require('./routes/Products');
 app.use("/products", productsRoute); 
+
 const userRoute = require('./routes/User');
 app.use("/user", userRoute); 
+
 const validateEmailRoute = require('./routes/ValidateEmail');
 app.use("/validate", validateEmailRoute); 
+
 const searchRoute = require('./routes/Search');
 app.use("/search", searchRoute); 
 
+// BASE ROUTE
 app.use("/", express.static(path.join(__dirname, "../client")));
 
 app.get("/*", (_req, res) => {
@@ -32,6 +36,7 @@ app.listen(PORT, () => {
 
 process.on('exit', () => {
   console.log('About to close');
+
   // THROW ERRORS IN FUNCTION
   connection.end((err) => {
     console.log(err);

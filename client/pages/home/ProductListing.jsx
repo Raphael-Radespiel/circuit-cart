@@ -8,14 +8,10 @@ function ProductListing(props){
 
   useEffect(() => {
     const request = {
-      method: "POST",
-      headers: {
-      "Content-Type": "application/json",
-    },
-      body: JSON.stringify({productAmount: props.amount})
+      method: "GET"
     }
 
-    fetch("./products", request)
+    fetch("./products?amount=" + props.amount, request)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

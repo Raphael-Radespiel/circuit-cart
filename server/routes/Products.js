@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {queryDatabase} = require("../utils/DatabaseUtil");
+const connection = require("../database").databaseConnection;
 
 function getRandomItemsFromArray(arr, amount){
   for (let i = arr.length - 1; i > 0; i--) {
@@ -10,30 +10,63 @@ function getRandomItemsFromArray(arr, amount){
   return arr.slice(0, amount);
 }
 
-router.post("/", (req, res) => {
-  console.log("this was called");
-  const productAmount = req.body.productAmount;
+router.get("/", (req, res) => {
+  console.log("./products was called with GET method");
 
-  queryDatabase("SELECT ProductID FROM Products;")
-    .then(result => {
+  try{
+    const productAmount = req.query.amount;
+
+    console.log("The query amount: " + req.query.amount);
+
+    if(productAmount == undefined){
+      throw new Error("Query amount undefined");
+    }
+
+    // GET ALL PRODUCT IDs
+    connection.query("SELECT ProductID FROM Products;", (err, result) => {
+      if(err) throw err;
+
       let rowPacketArray = getRandomItemsFromArray(result, productAmount);
-
-      let formatedArray = JSON.parse(JSON.stringify(rowPacketArray))
-        .map(value => value.ProductID);
-
+      let formatedArray = JSON.parse(JSON.stringify(rowPacketArray)).map(value => value.ProductID);
       const queryString = `SELECT Title, Price, ImageFile, AmountInStock, ProductID
       FROM Products WHERE ProductID IN (${formatedArray.join(', ')});`;
 
-      return queryDatabase(queryString)
-    })
-    .then(productResult => res.status(201).send(productResult))
-    .catch(error => res.status(500).send(error));
+      // QUERY THE RANDOM IDs AND SEND THE RESULT
+      connection.query(queryString, (err, result) => {
+        if(err) throw err;
+        res.status(201).send(result);
+      });
+    });
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).send(err);
+  }
 });
 
 router.get("/from-id", (req, res) => {
-  queryDatabase("SELECT Title, ProductID, Price, AmountInStock, ImageFile, Description FROM Products WHERE ProductID = ?;", [req.query.id])
-    .then(result => res.status(201).send(result))
-    .catch(error => res.status(500).send(error));
+  console.log("./products/from-id was called with GET method");
+  try{
+    const productID = req.query.id;
+
+    console.log("The query id: " + req.query.id);
+
+    if(productID == undefined){
+      throw new Error("Query id undefined");
+    }
+
+    connection.query(
+      "SELECT Title, ProductID, Price, AmountInStock, ImageFile, Description FROM Products WHERE ProductID = ?;",
+      [productID],
+      (err, result) => {
+      if(err) throw err;
+      res.status(201).send(result);
+    });
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).send(err);
+  }
 });
 
 module.exports = router;

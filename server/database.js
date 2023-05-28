@@ -10,10 +10,13 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err) => {
-  if(err){
-    throw err;
+  try{
+    if(err) throw err;
+    console.log("MySQL connected");
   }
-  console.log("MySQL connected");
+  catch(err){
+    console.log(err);
+  }
 });
 
 exports.databaseConnection = connection;
