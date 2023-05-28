@@ -27,20 +27,18 @@ function Validate({getLoginStatus}){
     }
 
     fetch("/validate", request)
-      .then(response => {
+      .then(async response => {
         if(response.ok){
           getLoginStatus();
           window.location = "/#/";
         }
         else{
-          return response.json()
+          let jsonResponse = await response.json();
+          console.log(jsonResponse);
+          const {paragraph, header, canResend} = jsonResponse.error;
+          setValidationState({pText: paragraph, h2Text: header, canResend: canResend});
         }
       })
-      .then(jsonResponse => {
-        console.log(jsonResponse);
-        const {paragraph, header, canResend} = jsonResponse.error;
-        setValidationState({pText: paragraph, h2Text: header, canResend: canResend});
-      });
   }, []);
 
   function resendToken(){

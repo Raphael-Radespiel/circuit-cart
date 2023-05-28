@@ -67,11 +67,11 @@ router.post("/", async (req, res) => {
     }
     
     // Set cookie
-    setCookies(res, email);
+    await setCookies(res, email);
     console.log("Cookie set");
       
     // Update user by setting them to Active and deleting their token
-    confirmValidUserInDatabase(token);
+    await confirmValidUserInDatabase(token);
     console.log("Confirm valid user");
 
     res.status(201).send();

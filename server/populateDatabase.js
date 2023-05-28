@@ -2,6 +2,8 @@ const dotenv = require("dotenv").config().parsed;
 
 const mysql = require("mysql");
 
+// ADD CORRECT TRY CATCH ERROR HANDLING
+
 const connection = mysql.createConnection({
   host: dotenv.DB_HOST,
   user: dotenv.DB_USER,
@@ -10,22 +12,31 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err) => {
-  if(err){
-    throw err;
+  try{
+    if(err){
+      throw err;
+    }
+
+    console.log("MySQL connected");
+
+    // SET SCHEMA
+    setDatabaseSchema();
+    console.log("SETTING DATABASE SCHEMA COMPLETE!");
+
+    // POPULATE SCHEMA
+    populateDatabase();
+    console.log("POPULATING DATABASE COMPLETE!");
+  }
+  catch(err){
+    console.log(err);
   }
 
-  // SET SCHEMA
-  setDatabaseSchema();
-
-  populateDatabase();
-
-  console.log("MySQL connected");
+  connection.end();
 });
 
 function setDatabaseSchema(){
   setProductsSchema();   
   setUserSchema();
-  console.log("SETTING DATABASE SCHEMA COMPLETE!");
 }
 
 function setProductsSchema(){
@@ -42,7 +53,9 @@ function setProductsSchema(){
     );
   `;
 
-  connection.query(queryString);
+  connection.query(queryString, (err) => {
+    if(err) throw err;
+  });
   console.log("Product Schema Set!");
 }
 
@@ -65,14 +78,14 @@ function setUserSchema(){
     );
   `;
 
-  connection.query(queryString);
+  connection.query(queryString, (err) => {
+    if(err) throw err;
+  });
   console.log("User Schema Set!");
 }
 
 function populateDatabase(){
   populateProducts();
-  
-  console.log("POPULATING DATABASE COMPLETE!");
 }
 
 // TODO:
@@ -199,6 +212,8 @@ function populateProducts(){
   ;`;
 
 
-  connection.query(queryString);
+  connection.query(queryString, (err) => {
+    if(err) throw err;
+  });
   console.log("Products Schema Populated!");
 }

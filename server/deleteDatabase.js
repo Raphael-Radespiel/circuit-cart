@@ -10,19 +10,28 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err) => {
-  if(err){
-    throw err;
-  }
-
   try{
+    if(err){
+      throw err;
+    }
+
+    console.log("MySQL connected");
+
+    // DROP User
     connection.query("DROP TABLE User;", (err) => {
-      if(err) console.log(err);
+      if(err) throw err;
     });
+    console.log("User Dropped");
+
+    // DROP Products 
     connection.query("DROP TABLE Products;", (err) => {
-      if(err) console.log(err);
+      if(err) throw err;
     });
+    console.log("Products Dropped");
   }
   catch(err){
     console.log(err);
   }
+
+  connection.end();
 });

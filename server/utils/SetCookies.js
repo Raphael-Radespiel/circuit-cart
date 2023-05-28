@@ -1,23 +1,24 @@
 const crypto = require("crypto");
 const { queryDatabase } = require("./DatabaseUtil");
 
-function setCookies(res, userEmail){
+async function setCookies(res, userEmail){
   const sessionID = crypto.randomBytes(32).toString('hex');
   res.cookie('sessionID', sessionID, { maxAge: 86400000, httpOnly: true });
   res.cookie('email', userEmail, { maxAge: 86400000, httpOnly: false });
 
   const insertQuery = 'UPDATE User SET SessionID = ? WHERE Email = ?;';
 
-  queryDatabase(insertQuery, [sessionID, userEmail])
+  await queryDatabase(insertQuery, [sessionID, userEmail])
     .catch(error => {
       throw error
     });
+  console.log("Cookie Set");
 }
 
-function removeCookies(email, sessionID, res){
+async function removeCookies(email, sessionID, res){
   const insertQuery = 'UPDATE User SET SessionID = NULL WHERE Email = ? AND SessionID = ?;';
 
-  queryDatabase(insertQuery, [email, sessionID])
+  await queryDatabase(insertQuery, [email, sessionID])
     .then(result => {
       if(result.length != 0){
         console.log("FOUND RESULT");
