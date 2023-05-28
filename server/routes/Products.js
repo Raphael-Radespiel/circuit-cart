@@ -34,7 +34,7 @@ router.get("/", (req, res) => {
       // QUERY THE RANDOM IDs AND SEND THE RESULT
       connection.query(queryString, (err, result) => {
         if(err) throw err;
-        res.status(201).send(result);
+        res.status(200).send(result);
       });
     });
   }
@@ -60,7 +60,7 @@ router.get("/from-id", (req, res) => {
       [productID],
       (err, result) => {
       if(err) throw err;
-      res.status(201).send(result);
+      res.status(200).send(result);
     });
   }
   catch(err){
