@@ -4,28 +4,37 @@ const fuzzySearch = require("fuzzy-search");
 const connection = require("../database").databaseConnection;
 
 router.get("/", (req, res) => {
-  console.log(req.query.filter);
-  console.log(req.query.search);
+  console.log("./search has been called with GET method");
 
-  if(req.query.filter == "" || req.query.filter == "all"){
-    connection.query("SELECT Title, ProductID FROM Products;", (err, result) => {
-      if(err){
-        res.status(201).send(err);
-      }
+  try{
+    const [filter, search] = [req.query.filter, req.query.search];
+    console.log("filter query = " + filter);
+    console.log("search query = " + search);
 
-      const searchOrder = getProductOrderFromSearch(result, req.query.search);
+    if(filter == undefined || search == undefined)
+      throw new Error("Undefined query");
+
+    let productTypeQueryString;
+    let productTypeQueryParams;
+
+    if(req.query.filter == "" || req.query.filter == "all"){
+      productTypeQueryString = "SELECT Title, ProductID FROM Products;";
+      productTypeQueryParams = [];
+    }
+    else{
+      productTypeQueryString = "SELECT Title, ProductID FROM Products WHERE ProductType = ?;";
+      productTypeQueryParams = [filter]
+    }
+
+    connection.query(productTypeQueryString, productTypeQueryParams, (err, result) => {
+      if(err) throw err;
+
+      const searchOrder = getProductOrderFromSearch(result, search);
       const queryString = getQueryStringFromSearchOrder(searchOrder);
 
-      console.log(searchOrder);
-      console.log(queryString);
-
       if(searchOrder.length != 0){ 
-        console.log("WHY");
         connection.query(queryString, (err, result) => {
-          if(err){
-            res.status(201).send(err);
-          }
-
+          if(err) throw err;
           res.status(201).send({result, order: searchOrder});
         });
       }
@@ -34,32 +43,9 @@ router.get("/", (req, res) => {
       }
     });
   }
-  else{
-    connection.query("SELECT Title, ProductID FROM Products WHERE ProductType = ?;", [req.query.filter], (err, result) => {
-      if(err){
-        res.status(201).send(err);
-      }
-      
-      const searchOrder = getProductOrderFromSearch(result, req.query.search);
-      const queryString = getQueryStringFromSearchOrder(searchOrder);
-
-      console.log(searchOrder);
-      console.log(queryString);
-
-      if(searchOrder.length != 0){ 
-        console.log("WHY");
-        connection.query(queryString, (err, result) => {
-          if(err){
-            res.status(201).send(err);
-          }
-
-          res.status(201).send({result, order: searchOrder});
-        });
-      }
-      else{
-        res.status(201).send({result: [], order: []});
-      }
-    });
+  catch(err){
+    console.log(err);
+    res.status(500).send(err);
   }
 });
 
