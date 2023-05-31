@@ -1,3 +1,4 @@
+// TODO: REMOVE THIS UTILITY AND IMPLEMENT CORRECT ERROR HANDLING AND DATA FETCHING ON THE CLIENT APPLICATION
 async function postRequest(data, serverRoute, callback){
     let request = {
       method: "POST",

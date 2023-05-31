@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const connection = require("../database").databaseConnection;
+const { queryDatabase } = require("./DatabaseUtil");
 
 async function setCookies(res, userEmail){
   const sessionID = crypto.randomBytes(32).toString('hex');
@@ -8,43 +8,23 @@ async function setCookies(res, userEmail){
 
   const insertQuery = 'UPDATE User SET SessionID = ? WHERE Email = ?;';
 
-  await new Promise((resolve, reject) => {
-    connection.query(insertQuery, [sessionID, userEmail], (err, result) => {
-      if(err){
-        reject(err);
-      }
-      else{
-        resolve(result);
-      }
-    });
-  }).catch(err => {throw err});
-
-  console.log("Cookie Set");
+  await queryDatabase(insertQuery, [sessionID, userEmail])
+    .catch(err => {throw err});
 }
 
 async function removeCookies(email, sessionID, res){
   const insertQuery = 'UPDATE User SET SessionID = NULL WHERE Email = ? AND SessionID = ?;';
 
-  await new Promise((resolve, reject) => {
-    connection.query(insertQuery, [email, sessionID], (err, result) => {
-      if(err){
-        reject(err);
-      }
-      else{
-        resolve(result);
-      }
-    });
-  })
+  // I SHOULD NOT BE SENDING RESPONSE OVER HERE!
+
+  await queryDatabase(insertQuery, [email, sessionID])
     .then(result => {
       if(result.length != 0){
-        console.log("FOUND RESULT for email and session ID (remove cookie function)");
         res.cookie('sessionID', '', { maxAge: 0, httpOnly: true });
         res.cookie('email', '', { maxAge: 0, httpOnly: false });
-        res.status(201).send();
       }
       else{
-        console.log("NO RESULT for email and session ID (remove cookie function)");
-        res.status(500).send();
+        throw new Error("User email or session ID not found");
       }
     })
     .catch(err => {throw err});

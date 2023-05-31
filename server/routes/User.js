@@ -24,6 +24,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // SIGNUP
+// TODO: WHEN YOUR EMAIL ALREADY EXISTS 
+// IN THE CLIENT IT ASKS YOU TO CHECK YOUR EMAIL
+// GO TO client/pages/signup/SignUp.jsx 
+// the problem is documented there
 router.post("/signup", (req, res) => {
   console.log("./user/signup was called with POST method");
   try{
@@ -58,9 +62,7 @@ async function signup(req){
   console.log(req);
 
   // Check if input data is valid
-  if(!validateSignupForm(req)){
-    throw new Error("Invalid input data");
-  }
+  validateSignupForm(req)
 
   // Salt and Hash the password
   const hashedPassword = await hashPassword(password);
@@ -97,6 +99,8 @@ async function insertUserIntoDatabase(email, hashedPassword, token, verification
     .catch(err => {throw err});
 }
 
+// TODO: ERROR IN INVALID EMAIL CRASHES THE SERVER
+// IMPORTANT!!!
 async function sendVerificationEmail(email, token){
   const mailOptions = {
     from: dotenv.EMAIL_USER, 
@@ -161,9 +165,7 @@ router.post("/resend-token", (req, res) => {
     if(email == undefined) throw new Error("Undefined email");
 
     // VALIDATE EMAIL INPUT
-    if(!validateEmail(email)){
-      throw new Error({ success: false, message: "Invalid Input Data"});
-    }
+    validateEmail(email);
 
     // Create email validation token and 6 minute time limit
     const { token, verificationTimeLimit } = createVerificationToken();
@@ -191,14 +193,14 @@ router.post("/resend-token", (req, res) => {
   }
 });
 
-router.get("/logout", (req,res) => {
+router.get("/logout", async (req,res) => {
   console.log("./user/logout with GET method");
   try{
-
     if(req.cookies.email == undefined || req.cookies.sessionID == undefined)
       throw new Error("Undefined cookies");
 
-    removeCookies(req.cookies.email, req.cookies.sessionID, res);
+    await removeCookies(req.cookies.email, req.cookies.sessionID, res);
+    res.status(201).send();
   }
   catch(err){
     console.log(err);

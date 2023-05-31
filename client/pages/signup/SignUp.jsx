@@ -22,6 +22,10 @@ function SignUp(){
       return;
     }
 
+    // TODO: 
+    // This should not be using the util function.
+    // We should handle the response in this function.
+    // If the email already exists, don't take the user to /#/validate
     await postRequest(data, "/user/signup", () => {
       window.location = "/#/validate";
     });

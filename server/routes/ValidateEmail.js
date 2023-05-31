@@ -2,79 +2,75 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../database").databaseConnection;
 const cookieParser = require('cookie-parser');
+const { queryDatabase } = require("../utils/DatabaseUtil");
 
 router.use(cookieParser());
 
 const {getDateToInt} = require("../utils/DateFunctions");
 const {setCookies} = require("../utils/SetCookies");
 
-async function confirmValidUserInDatabase(token){
-  try{
-    const updateQuery = `UPDATE User 
-    SET isActive = 1, VerificationToken = null, VerificationTimeLimit = null
-    WHERE VerificationToken = ?;`;
-    await connection.query(updateQuery, [token], (err) => {throw err});
-  } 
-  catch(error){
-    throw error;
-  }
+async function updateUserValidity(token){
+  const updateQuery = `UPDATE User 
+  SET isActive = 1, VerificationToken = null, VerificationTimeLimit = null
+  WHERE VerificationToken = ?;`;
+
+  await queryDatabase(updateQuery, [token])
+    .catch(err => {throw err});
 }
 
 // Validate the email address
 router.post("/", async (req, res) => {
-  console.log("VALIDATION");
+  console.log("./validate called with POST method");
   try{
     const { token, email } = req.body;
 
+    if(token == undefined || email == undefined)
+      throw new Error("Undefined token or email");
+
     const tokenQuery = `SELECT VerificationToken, VerificationTimeLimit FROM User WHERE Email = ?;`
 
-    const result = await new Promise((resolve, reject) => {
-      connection.query(tokenQuery, [email], (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
+    await queryDatabase(tokenQuery, [email])
+      .then(result => {
+        if(result.length == 0){
+          throw new Error({
+            message: "Incorrect Email",
+            header: "The email in the url token is invalid",
+            paragraph: "The email in the url is not valid. Please check that you did not modify it from the email and try again.",
+            canResend: false
+          });
         }
-      });
-    });
 
-    if(result.length == 0){
-        let error = new Error("Incorrect Email");
-        error.header = "The email in the url token is invalid";
-        error.paragraph = "The email value of the link you entered in the url is not valid. Please check that you did not modify it from the email and try again.";
-        error.canResend = false;
-        throw error; 
-    }
+        const { VerificationTimeLimit, VerificationToken } = result[0];
 
-    const { VerificationTimeLimit, VerificationToken } = result[0];
-    console.log(token, email);
-    console.log(VerificationToken);
+        if(VerificationToken != token){
+          throw new Error({
+            message: "Incorrect Token",
+            header: "Your token is invalid",
+            paragraph: "The token in the url is not correct. Please check that you did not modify it from the email and try again.",
+            canResend: false
+          });
+        }
 
-    if(VerificationToken != token){
-      let error = new Error("Incorrect Token");
-      error.header = "Your token is invalid";
-      error.paragraph = "The validation token link you entered in the url is not valid. Please check that you did not modify it from the email and try again.";
-      error.canResend = false;
-      throw error; 
-    }
+        if(VerificationTimeLimit < getDateToInt(new Date())){
+          throw new Error({
+            message: "Verification Token has expired",
+            header: "Your Token has expired",
+            paragraph: "The validation token you provided has expired. Please request a new validation token to be sent to your email.",
+            canResend: true
+          });
+        }
+      })
+      .catch(err => {throw err});
 
-    if(VerificationTimeLimit < getDateToInt(new Date())){
-      let error = new Error("Verification Token has expired");
-      error.header = "Your Token has expired";
-      error.paragraph = "The validation token you provided has expired. Please request a new validation token to be sent to your email.";
-      error.canResend = true;
-      throw error; 
-    }
-    
-    // Set cookie
-    await setCookies(res, email);
-    console.log("Cookie set");
-      
-    // Update user by setting them to Active and deleting their token
-    await confirmValidUserInDatabase(token);
-    console.log("Confirm valid user");
+      // Set cookie
+      await setCookies(res, email);
+      console.log("Cookie set");
+        
+      // Update user by setting them to Active and deleting their token
+      await updateUserValidity(token);
+      console.log("Confirm valid user");
 
-    res.status(201).send();
+      res.status(201).send();
   }
   catch (error){
     console.log(error.message);
@@ -83,37 +79,30 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/session", async (req, res) => {
-  const email = req.cookies.email;
-  const session = req.cookies.sessionID;
+  console.log("./validate/session called with GET method");
 
-  // if user exists and is active and is signed in
-  const query = "SELECT UserType FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";
   try{
+    const email = req.cookies.email;
+    const session = req.cookies.sessionID;
+
+    if(email == undefined || session == undefined)
+      throw new Error("Undefined cookies");
+
+    // if user exists and is active and is signed in
+    const query = "SELECT Email FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";
+
     connection.query(query, [email, session], (err, result) => {
-      console.log(result[0]);
-      if(err){
-        res.status(500).send(err.message);
-        return;
-      } 
+      if(err) throw err;
 
       if(result.length == 0){
-        console.log("Length 0");
         res.status(201).send({isLoggedIn: false, isAdmin: false});
-        return; 
       }
-
-      if(result[0].UserType == "customer"){
-        console.log("Customer");
+      else{
         res.status(201).send({isLoggedIn: true, isAdmin: false});
-        return; 
       }
-
-        console.log("ADMIN");
-        res.status(201).send({isLoggedIn: true, isAdmin: true});
-        return; 
     });
   }
-  catch (err){
+  catch(err){
     console.log(err);
     res.status(500).send(err.message);
   }

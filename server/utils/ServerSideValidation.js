@@ -1,51 +1,44 @@
+// THIS IS NOT HOW SECURE VALIDATION WORKS!
+
 function validateEmail(email){
   // Test Email
   const emailRegex = /^\S+@\S+\.\S+$/;
-  if(!emailRegex.test(email)){
-    console.log("Sorry, invalid email");
-    return false;
-  }
 
-  return true;
+  if(!emailRegex.test(email)){
+    console.log("Invalid EMAIL");
+    throw new Error("Invalid Email")
+  }
+    console.log("VALID EMAIL");
 }
 
 function validatePassword(password){
   if(password.length < 8){
-    console.log("Sorry, password needs to be 8 or longer");
-    return false;
+    throw new Error("Invalid Password, smaller than 8 characters")
   }
 
   if(password.length > 16){
-    console.log("Sorry, password is longer than 16 characters");
-    return false;
+    throw new Error("Invalid password, longer than 16 characters");
   }
-
-  return true;
 }
 
 function validateSignupForm(data){
   // Test Email
-  if(!validateEmail(data.email)) return false;
+  validateEmail(data.email);
 
   // Test password
-  if(!validatePassword(data.password)) return false;
+  validatePassword(data.password);
 
   if(data.password != data.confirmedPassword){
-    console.log("Your password and confirmed password are not the same");
-    return false;
+    throw new Error("Confirmed password and password are not the same");
   }
-
-  return true;
 }
 
 function validateLoginForm(data){
   // Test Email
-  if(!validateEmail(data.email)) return false;
+  validateEmail(data.email);
 
   // Test password
-  if(!validatePassword(data.password)) return false;
-
-  return true;
+  validatePassword(data.password);
 }
 
 
