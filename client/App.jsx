@@ -19,6 +19,7 @@ import "./assets/css/global.css"
 function App() {
   const [userSession, setUserSession] = useState({isLoggedIn: false, isAdmin: false});
   const [searchQuery, setSearchQuery] = useState("");
+  const [navbarClass, setNavbarClass] = useState("");
 
   useEffect(() => {
     getLoginStatus();
@@ -43,8 +44,8 @@ function App() {
   return (
     <>
       <header>
-        <Navbar>
-          <Searchbar fetchSearch={fetchSearch}/>
+        <Navbar className={navbarClass}>
+          <Searchbar fetchSearch={fetchSearch} setNavbarClass={setNavbarClass}/>
           <Hamburger {...userSession} getLoginStatus={getLoginStatus}/>
         </Navbar>
       </header>

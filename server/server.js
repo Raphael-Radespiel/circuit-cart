@@ -23,7 +23,7 @@ app.use("/search", searchRoute);
 app.use("/", express.static(path.join(__dirname, "../client")));
 
 app.get("/*", (_req, res) => {
-  console.log("request was made");
+  console.log("Get request to /* was made");
   res.sendFile(path.join(__dirname, "../client", "index.html"));
 })
 

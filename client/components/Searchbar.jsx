@@ -8,16 +8,17 @@ import "../assets/css/Searchbar.css";
 // UNDER 54REM 
 // CHANGE SEARCHBAR THINGS
 
-function Searchbar({fetchSearch}){
+function Searchbar({fetchSearch, setNavbarClass}){
+  const WINDOW_BREAKPOINT = 864;
   const [selectWidth, setSelectWidth] = useState({width: "48px"});
   const [searchColor, setSearchColor] = useState({color: "#F2E7D335"});
   const [searchLink, setSearchLink] = useState("/search");
-  const [searchType, setSearchType] = useState("desktop");
+  const [searchType, setSearchType] = useState((window.innerWidth < WINDOW_BREAKPOINT) ? "mobile" : "desktop");
+  const [isMobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const filterRef = useRef("");
   const inputRef = useRef("");
 
-  const WINDOW_BREAKPOINT = 864;
   window.addEventListener("resize", () => {
     if(window.innerWidth < WINDOW_BREAKPOINT && searchType != "mobile"){
       setSearchType("mobile");
@@ -57,10 +58,32 @@ function Searchbar({fetchSearch}){
         <option value="motor">Motor</option> 
         <option value="kit">Kit</option> 
       </select>
+      {
+        isMobileSearchOpen && 
+      <button onClick={() => {setNavbarClass(""); setMobileSearchOpen(false);}}>
+        x
+      </button>
+      }
       <input type="text" ref={inputRef} style={searchColor} placeholder="Search for Components" onChange={e => updateSearchColor(e)}/>
-      <Link className="react-router-links search-button" onClick={() => fetchSearch({filter: filterRef.current.value, search: inputRef.current.value})} to={searchLink}>
-        <SearchIcon width="27" height="27"/>
-      </Link>
+      {
+      (searchType == "desktop") 
+        ?
+        <Link className="react-router-links search-button" onClick={() => fetchSearch({filter: filterRef.current.value, search: inputRef.current.value})} to={searchLink}>
+          <SearchIcon width="27" height="27"/>
+        </Link>
+        :
+        (
+          (!isMobileSearchOpen) 
+            ?
+            <button className="search-button" onClick={() => {setNavbarClass("mobile-searchbar--open"); setMobileSearchOpen(true);}}>
+              <SearchIcon width="27" height="27"/>
+            </button>
+            :
+        <Link className="react-router-links search-button" onClick={() => fetchSearch({filter: filterRef.current.value, search: inputRef.current.value})} to={searchLink}>
+          <SearchIcon width="27" height="27"/>
+        </Link>
+        )
+      }
     </div>
   )
 }

@@ -1,3 +1,42 @@
+.mobile-searchbar--open h1, 
+.mobile-searchbar--open a,
+.mobile-searchbar--open .hamburger{
+  display: none; 
+}
+
+.mobile-searchbar--open .filtered-search input{
+  display: flex;
+}
+
+.mobile-searchbar--open .filtered-search{
+  width: 100%;
+  max-width: 100%;
+  margin: .25rem auto;
+}
+
+.mobile-searchbar--open .filtered-search .search-button{
+  background-color: var(--clr-accent);
+  width: 3rem;
+  border-radius: 0 15px 15px 0;
+  padding-left: 1rem;
+}
+
+.mobile-searchbar--open .search-button svg{
+  stroke: var(--clr-primary);
+}
+
+.mobile-searchbar--open button{
+  width: 3rem;
+  font-size: 2rem;
+  font-weight: 900;
+  font-family: monospace;
+  color: var(--clr-primary);
+  background-color: var(--clr-accent);
+  border: none;
+  border-radius: 15px 0 0 15px;
+  padding-left: 0.25rem;
+}
+
 .filtered-search{
   display: flex;
   margin-left: auto;
