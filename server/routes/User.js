@@ -28,33 +28,32 @@ const transporter = nodemailer.createTransport({
 // IN THE CLIENT IT ASKS YOU TO CHECK YOUR EMAIL
 // GO TO client/pages/signup/SignUp.jsx 
 // the problem is documented there
+
+// GOOD ERROR HANDLING
 router.post("/signup", (req, res) => {
   console.log("./user/signup was called with POST method");
-  try{
-    let duplicateEmailQuery = `SELECT * FROM User WHERE Email= ?;`;
 
-    if(req.body.email == undefined) throw new Error("Undefined email");
+  if(req.body.email == undefined || req.body.password == undefined) throw new Error("Undefined body");
 
-    // Check if account already exists
-    connection.query(duplicateEmailQuery, [req.body.email], async (err, result) => {
-      if(err) throw new Error({ success: false, message: 'database error'});
-
-      console.log("Queried database with result of: ");
-      console.log(result);
+  // Check if account already exists
+  connection.query(`SELECT * FROM User WHERE Email= ?;`, [req.body.email], async (err, result) => {
+    try{
+      if(err) 
+        throw err;
 
       if(result.length != 0){
-        res.status(200).send({success: false, message: "Account email already exists"});
+        res.status(200).send("Account email already exists");
       }
       else{
         await signup(req.body);
-        res.status(201).send({success: true, message: "Successful Signup"});
+        res.status(201).send("Successful Signup");
       }
-    });
-  }
-  catch(err){
-    console.log(err);
-    res.status(500).send({ success: false, message: error.message, error: error });
-  }
+    }
+    catch(err){
+      console.log(err.message);
+      res.status(500).send(err);
+    }
+  });
 });
 
 async function signup(req){
@@ -69,11 +68,11 @@ async function signup(req){
   // Create email validation token and 6 minute time limit
   const { token, verificationTimeLimit } = createVerificationToken();
 
-  // insert our values into the database
-  await insertUserIntoDatabase(email, hashedPassword, token, verificationTimeLimit);
-
   // Send out an email with the token
   await sendVerificationEmail(email, token);
+
+  // insert our values into the database
+  await insertUserIntoDatabase(email, hashedPassword, token, verificationTimeLimit);
 }
 
 async function hashPassword(password){
@@ -99,8 +98,8 @@ async function insertUserIntoDatabase(email, hashedPassword, token, verification
     .catch(err => {throw err});
 }
 
-// TODO: ERROR IN INVALID EMAIL CRASHES THE SERVER
-// IMPORTANT!!!
+// GOOD ERROR HANDLING
+// TODO: CHANGE EMAIL HTML
 async function sendVerificationEmail(email, token){
   const mailOptions = {
     from: dotenv.EMAIL_USER, 
@@ -123,76 +122,97 @@ async function sendVerificationEmail(email, token){
   }).catch(err => {throw err});
 }
 
-// LOGIN
+// WRITE MY COMMIT LIKE
+// I READ THE EXPRESS DOCUMENTATION
+// IT HANDLES ERRORS NORMALLY
+// BUT IF ITS INSIDE AN ASYNC FUNCTION, 
+// WE HAVE TO HAVE A TRY CATCH BLOCK INSIDE OF THEM
+// AND NOW IT WORKS
+// NOW IM TESTING WITH CURL ALL THESE FUNCTIONS AND METHODS
+//
+// CURL help
+// -X METHOD-NAME to change method
+// --cookie "name=value" for setting cookies
+// -H 'Content-Type: application/json'
+// -d '{"KEY": "VALUE", "KEY": "VALUE"}'
+//
+// AFTER GOING THROUGH EACH METHOD HTTP REQUEST, 
+// CHECK THE FUNCTIONS THAT ARE USED INSIDE THESE METHODS
+
+// GOOD ERROR HANDLING
 router.post("/login", (req, res) => {
   console.log("./user/login with POST method")
-  try{
-    const { password, email } = req.body;
-    if(password == undefined || email == undefined) throw new Error("Undefined params");
+  const { password, email } = req.body;
+  if(password == undefined || email == undefined) throw new Error("Undefined params");
 
-    const userQuery = `SELECT Password, isActive FROM User WHERE Email = ?;`;
-    connection.query(userQuery, [email], async (err, result) => {
+  const userQuery = `SELECT Password, isActive FROM User WHERE Email = ?;`;
+  connection.query(userQuery, [email], async (err, result) => {
+    try{
       if(err)
         throw err;
 
       if(result.length == 0)
-        throw new Error({message: 'Email is not registered'});
+        throw new Error('Email is not registered');
 
       if(result[0].isActive == 0)
-        throw new Error({message: 'Account not validated'});
+        throw new Error('Account not validated');
 
       // Compare passwords
       const isValidPassword = await bcrypt.compare(password, result[0].Password);
       if(!isValidPassword)
-        throw new Error({message: 'Invalid Password'});
+        throw new Error('Invalid Password');
 
       // Set cookie
       await setCookies(res, email);
 
       res.status(201).send();
-    });
-  }
-  catch(error){
-    console.log(error.message);
-    res.status(500).send({success: false, message: error.message, error: error});
-  }
+    }
+    catch(error){
+      console.log(error.message);
+      res.status(500).send({success: false, message: error.message, error: error});
+    }
+  });
 });
 
+// GOOD ERROR HANDLING
 router.post("/resend-token", (req, res) => {
-  try{
-    const email = req.body.email;
+  const email = req.body.email;
 
-    if(email == undefined) throw new Error("Undefined email");
+  if(email == undefined) throw new Error("Undefined email");
 
-    // VALIDATE EMAIL INPUT
-    validateEmail(email);
+  // VALIDATE EMAIL INPUT
+  validateEmail(email);
 
-    // Create email validation token and 6 minute time limit
-    const { token, verificationTimeLimit } = createVerificationToken();
+  // Create email validation token and 6 minute time limit
+  const { token, verificationTimeLimit } = createVerificationToken();
 
-    // Check if account exists and is validated then update values into the database
-    const updateQuery = `UPDATE User 
-    SET VerificationToken = ?, VerificationTimeLimit = ? 
-    WHERE Email = ? AND isActive = 0;`;
+  // Check if account exists and is validated then update values into the database
+  const updateQuery = `UPDATE User 
+  SET VerificationToken = ?, VerificationTimeLimit = ? 
+  WHERE Email = ? AND isActive = 0;`;
 
-    connection.query(updateQuery, [token, verificationTimeLimit, email], async (err, result) => {
-      if(err) throw err;
+  connection.query(updateQuery, [token, verificationTimeLimit, email], async (err, result) => {
+    try{
+      if(err) 
+        throw err;
 
-      if(result.length == 0){
-        throw new Error({success: false, message: 'Email does not exist or is already validated'});
+      if(result.length == undefined){
+        throw new Error('Email does not exist or is already validated');
       }
       else{
         await sendVerificationEmail(email, token);
-        res.status(201).send({message: "Token resent"});
+        res.status(201).send("Token resent");
       }
-    });
-  }
-  catch(err){
-    console.log(err);
-    res.status(500).send(err);
-  }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).send(err);
+      console.log("THERE WAS AN ERROR")
+    }
+  });
 });
 
+// GOOD ERROR HANDLING
 router.get("/logout", async (req,res) => {
   console.log("./user/logout with GET method");
   try{

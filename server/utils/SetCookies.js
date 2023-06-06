@@ -15,11 +15,10 @@ async function setCookies(res, userEmail){
 async function removeCookies(email, sessionID, res){
   const insertQuery = 'UPDATE User SET SessionID = NULL WHERE Email = ? AND SessionID = ?;';
 
-  // I SHOULD NOT BE SENDING RESPONSE OVER HERE!
-
   await queryDatabase(insertQuery, [email, sessionID])
     .then(result => {
-      if(result.length != 0){
+      console.log(result.length != undefined);
+      if(result.length != undefined){
         res.cookie('sessionID', '', { maxAge: 0, httpOnly: true });
         res.cookie('email', '', { maxAge: 0, httpOnly: false });
       }

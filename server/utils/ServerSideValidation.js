@@ -27,19 +27,6 @@ function validateSignupForm(data){
 
   // Test password
   validatePassword(data.password);
-
-  if(data.password != data.confirmedPassword){
-    throw new Error("Confirmed password and password are not the same");
-  }
 }
 
-function validateLoginForm(data){
-  // Test Email
-  validateEmail(data.email);
-
-  // Test password
-  validatePassword(data.password);
-}
-
-
-module.exports = { validateLoginForm, validateSignupForm, validateEmail };
+module.exports = { validateSignupForm, validateEmail };
