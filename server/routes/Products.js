@@ -31,7 +31,7 @@ router.get("/", (req, res) => {
       // QUERY THE RANDOM IDs AND SEND THE RESULT
       connection.query(queryString, (err, result) => {
         try{
-        if(err) throw err;
+          if(err) throw err;
           res.status(200).send(result);
         }
         catch(err){

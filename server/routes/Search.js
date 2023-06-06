@@ -6,27 +6,25 @@ const connection = require("../database").databaseConnection;
 router.get("/", (req, res) => {
   console.log("./search has been called with GET method");
 
-  try{
-    const [filter, search] = [req.query.filter, req.query.search];
-    console.log("filter query = " + filter);
-    console.log("search query = " + search);
+  const [filter, search] = [req.query.filter, req.query.search];
 
-    if(filter == undefined || search == undefined)
-      throw new Error("Undefined query");
+  if(filter == undefined || search == undefined)
+    throw new Error("Undefined query");
 
-    let productTypeQueryString;
-    let productTypeQueryParams;
+  let productTypeQueryString;
+  let productTypeQueryParams;
 
-    if(req.query.filter == "" || req.query.filter == "all"){
-      productTypeQueryString = "SELECT Title, ProductID FROM Products;";
-      productTypeQueryParams = [];
-    }
-    else{
-      productTypeQueryString = "SELECT Title, ProductID FROM Products WHERE ProductType = ?;";
-      productTypeQueryParams = [filter]
-    }
+  if(req.query.filter == "" || req.query.filter == "all"){
+    productTypeQueryString = "SELECT Title, ProductID FROM Products;";
+    productTypeQueryParams = [];
+  }
+  else{
+    productTypeQueryString = "SELECT Title, ProductID FROM Products WHERE ProductType = ?;";
+    productTypeQueryParams = [filter]
+  }
 
-    connection.query(productTypeQueryString, productTypeQueryParams, (err, result) => {
+  connection.query(productTypeQueryString, productTypeQueryParams, (err, result) => {
+    try{
       if(err) throw err;
 
       const searchOrder = getProductOrderFromSearch(result, search);
@@ -34,19 +32,25 @@ router.get("/", (req, res) => {
 
       if(searchOrder.length != 0){ 
         connection.query(queryString, (err, result) => {
-          if(err) throw err;
-          res.status(201).send({result, order: searchOrder});
+          try{
+            if(err) throw err;
+            res.status(201).send({result, order: searchOrder});
+          }
+          catch(err){
+            console.log(err);
+            res.status(500).send(err);
+          }
         });
       }
       else{
         res.status(201).send({result: [], order: []});
       }
-    });
-  }
-  catch(err){
-    console.log(err);
-    res.status(500).send(err);
-  }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+  });
 });
 
 function getProductOrderFromSearch(result, searchTerm){
