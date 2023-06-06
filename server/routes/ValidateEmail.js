@@ -64,11 +64,9 @@ router.post("/", async (req, res) => {
 
       // Set cookie
       await setCookies(res, email);
-      console.log("Cookie set");
         
       // Update user by setting them to Active and deleting their token
       await updateUserValidity(token);
-      console.log("Confirm valid user");
 
       res.status(201).send();
   }
@@ -78,20 +76,20 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/session", async (req, res) => {
+router.get("/session", (req, res) => {
   console.log("./validate/session called with GET method");
 
-  try{
-    const email = req.cookies.email;
-    const session = req.cookies.sessionID;
+  const email = req.cookies.email;
+  const session = req.cookies.sessionID;
 
-    if(email == undefined || session == undefined)
-      throw new Error("Undefined cookies");
+  if(email == undefined || session == undefined)
+    throw new Error("Undefined cookies");
 
-    // if user exists and is active and is signed in
-    const query = "SELECT Email FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";
+  // if user exists and is active and is signed in
+  const query = "SELECT Email FROM User WHERE Email = ? AND isActive = 1 AND SessionID = ?;";
 
-    connection.query(query, [email, session], (err, result) => {
+  connection.query(query, [email, session], (err, result) => {
+    try{
       if(err) throw err;
 
       if(result.length == 0){
@@ -100,12 +98,12 @@ router.get("/session", async (req, res) => {
       else{
         res.status(201).send({isLoggedIn: true});
       }
-    });
-  }
-  catch(err){
-    console.log(err);
-    res.status(500).send(err.message);
-  }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).send(err.message);
+    }
+  });
 });
 
 module.exports = router;
