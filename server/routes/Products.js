@@ -13,17 +13,14 @@ function getRandomItemsFromArray(arr, amount){
 router.get("/", (req, res) => {
   console.log("./products was called with GET method");
 
-  try{
-    const productAmount = req.query.amount;
+  const productAmount = req.query.amount;
 
-    console.log("The query amount: " + req.query.amount);
+  if(productAmount == undefined)
+    throw new Error("Query amount undefined");
 
-    if(productAmount == undefined){
-      throw new Error("Query amount undefined");
-    }
-
-    // GET ALL PRODUCT IDs
-    connection.query("SELECT ProductID FROM Products;", (err, result) => {
+  // GET ALL PRODUCT IDs
+  connection.query("SELECT ProductID FROM Products;", (err, result) => {
+    try{
       if(err) throw err;
 
       let rowPacketArray = getRandomItemsFromArray(result, productAmount);
@@ -33,15 +30,21 @@ router.get("/", (req, res) => {
 
       // QUERY THE RANDOM IDs AND SEND THE RESULT
       connection.query(queryString, (err, result) => {
+        try{
         if(err) throw err;
-        res.status(200).send(result);
+          res.status(200).send(result);
+        }
+        catch(err){
+          console.log(err);
+          res.status(500).send(err);
+        }
       });
-    });
-  }
-  catch(err){
-    console.log(err);
-    res.status(500).send(err);
-  }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).send(err);
+    }
+  });
 });
 
 router.get("/from-id", (req, res) => {
