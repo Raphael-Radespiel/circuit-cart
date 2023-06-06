@@ -68,7 +68,7 @@ function ShoppingCart({isLoggedIn}){
               <img src={"../../assets/images/" + value.ImageFile}></img>
               <div className="shopping-cart__text-content">
                 <div className="shopping-cart__text-value-div">
-                  <h1>{value.Title}</h1> 
+                  <a href={"../#/product?id="+value.ProductID}>{value.Title}</a>
                   <p>{numberToPriceString(value.Price * value.amount)}</p>
                 </div>
                 <div className="shopping-cart__button-div">
