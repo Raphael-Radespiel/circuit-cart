@@ -1,6 +1,5 @@
 import "../../assets/css/Forms.css"
 import { validateSignupForm } from "../../utils/Validation" 
-import { postRequest } from "../../utils/PostRequest"
 
 function SignUp(){
 
@@ -22,13 +21,23 @@ function SignUp(){
       return;
     }
 
-    // TODO: 
-    // This should not be using the util function.
-    // We should handle the response in this function.
-    // If the email already exists, don't take the user to /#/validate
-    await postRequest(data, "/user/signup", () => {
+    let request = {
+      method: "POST",
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    let response = await fetch("/user/signup", request);
+
+    if(response.ok == true){
       window.location = "/#/validate";
-    });
+    }
+    else{
+      alert("Something went wrong. Try again!");
+    }
   }
 
   return (

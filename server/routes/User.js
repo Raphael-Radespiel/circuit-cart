@@ -23,12 +23,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// SIGNUP
-// TODO: WHEN YOUR EMAIL ALREADY EXISTS 
-// IN THE CLIENT IT ASKS YOU TO CHECK YOUR EMAIL
-// GO TO client/pages/signup/SignUp.jsx 
-// the problem is documented there
-
 // GOOD ERROR HANDLING
 router.post("/signup", (req, res) => {
   console.log("./user/signup was called with POST method");
@@ -51,7 +45,7 @@ router.post("/signup", (req, res) => {
     }
     catch(err){
       console.log(err.message);
-      res.status(500).send(err);
+      res.status(500).send(err.message);
     }
   });
 });
@@ -206,7 +200,7 @@ router.post("/resend-token", (req, res) => {
     }
     catch(err){
       console.log(err);
-      res.status(500).send(err);
+      res.status(500).send(err.message);
       console.log("THERE WAS AN ERROR")
     }
   });
@@ -224,7 +218,7 @@ router.get("/logout", async (req,res) => {
   }
   catch(err){
     console.log(err);
-    res.status(500).send(err);
+    res.status(500).send(err.message);
   }
 });
 
