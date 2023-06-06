@@ -45,7 +45,7 @@ router.post("/signup", (req, res) => {
     }
     catch(err){
       console.log(err.message);
-      res.status(500).send(err.message);
+      res.status(500).send({message: err.message});
     }
   });
 });
@@ -161,9 +161,9 @@ router.post("/login", (req, res) => {
 
       res.status(201).send();
     }
-    catch(error){
-      console.log(error.message);
-      res.status(500).send({success: false, message: error.message, error: error});
+    catch(err){
+      console.log(err.message);
+      res.status(500).send({message: err.message});
     }
   });
 });
@@ -201,7 +201,6 @@ router.post("/resend-token", (req, res) => {
     catch(err){
       console.log(err);
       res.status(500).send(err.message);
-      console.log("THERE WAS AN ERROR")
     }
   });
 });
@@ -217,7 +216,6 @@ router.get("/logout", async (req,res) => {
     res.status(201).send();
   }
   catch(err){
-    console.log(err);
     res.status(500).send(err.message);
   }
 });

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 
 import { validateLoginForm } from "../../utils/Validation" 
-import { postRequest } from "../../utils/PostRequest"
 
 import "../../assets/css/Forms.css"
 
@@ -24,10 +23,24 @@ function LogIn({getLoginStatus}){
       return;
     }
 
-    await postRequest(data, "/user/login", () => {
+    let request = {
+      method: "POST",
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    let response = await fetch("/user/login", request);
+    if(response.ok == false){
+      let jsonResponse = await response.json();
+      alert(jsonResponse.message);
+    }
+    else{
       getLoginStatus();
       window.location = '/#/';
-    });
+    }
   }
 
   return (

@@ -36,7 +36,8 @@ function SignUp(){
       window.location = "/#/validate";
     }
     else{
-      alert("Something went wrong. Try again!");
+      let jsonResponse = await response.json();
+      alert(jsonResponse.message);
     }
   }
 

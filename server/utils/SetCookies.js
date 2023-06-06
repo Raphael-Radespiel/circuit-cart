@@ -17,7 +17,7 @@ async function removeCookies(email, sessionID, res){
 
   await queryDatabase(insertQuery, [email, sessionID])
     .then(result => {
-      console.log(result.length != undefined);
+
       if(result.length != undefined){
         res.cookie('sessionID', '', { maxAge: 0, httpOnly: true });
         res.cookie('email', '', { maxAge: 0, httpOnly: false });
