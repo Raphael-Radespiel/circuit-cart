@@ -17,7 +17,7 @@ import ShoppingCart from "./pages/shopping-cart/ShoppingCart"
 import "./assets/css/global.css"
 
 function App() {
-  const [userSession, setUserSession] = useState({isLoggedIn: false, isAdmin: false});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [navbarClass, setNavbarClass] = useState("");
 
@@ -30,10 +30,10 @@ function App() {
       const response = await fetch(`/validate/session`, 
         {method: 'GET', credentials: "same-origin"});
       const responseJson = await response.json();
-      setUserSession(responseJson);
+      setIsLoggedIn(responseJson.isLoggedIn);
     }
     else{
-      setUserSession({isLoggedIn: false, isAdmin: false});
+      setIsLoggedIn(false);
     }
   };
 
@@ -46,18 +46,18 @@ function App() {
       <header>
         <Navbar className={navbarClass}>
           <Searchbar fetchSearch={fetchSearch} setNavbarClass={setNavbarClass}/>
-          <Hamburger {...userSession} getLoginStatus={getLoginStatus}/>
+          <Hamburger isLoggedIn={isLoggedIn} getLoginStatus={getLoginStatus}/>
         </Navbar>
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<Home isLoggedIn={userSession.isLoggedIn}/>}/>
+          <Route path="/" element={<Home isLoggedIn={isLoggedIn}/>}/>
           <Route path="/search" element={<Search searchQuery={searchQuery}/>}/>
           <Route path="/product" element={<ProductPage/>}/>
           <Route path="/login" element={<LogIn getLoginStatus={getLoginStatus}/>}/>
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/validate" element={<Validate getLoginStatus={getLoginStatus}/>}/>
-          <Route path="/shopping-cart" element={<ShoppingCart isLoggedIn={userSession.isLoggedIn}/>}/>
+          <Route path="/shopping-cart" element={<ShoppingCart isLoggedIn={isLoggedIn}/>}/>
         </Routes>
       </main>
       <Footer/>

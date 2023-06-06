@@ -95,10 +95,10 @@ router.get("/session", async (req, res) => {
       if(err) throw err;
 
       if(result.length == 0){
-        res.status(201).send({isLoggedIn: false, isAdmin: false});
+        res.status(201).send({isLoggedIn: false});
       }
       else{
-        res.status(201).send({isLoggedIn: true, isAdmin: false});
+        res.status(201).send({isLoggedIn: true});
       }
     });
   }

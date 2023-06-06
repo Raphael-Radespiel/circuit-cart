@@ -84,9 +84,9 @@ function createVerificationToken() {
 
 async function insertUserIntoDatabase(email, hashedPassword, token, verificationTimeLimit){
   let insertQuery = `INSERT INTO User 
-  (Email, Password, isActive, VerificationToken, VerificationTimeLimit, UserType, SessionID) 
+  (Email, Password, isActive, VerificationToken, VerificationTimeLimit, SessionID) 
   VALUES 
-  (?, ?, 0, ?, ?, 'customer', null);`;
+  (?, ?, 0, ?, ?, null);`;
 
   await queryDatabase(insertQuery, [email, hashedPassword, token, verificationTimeLimit])
     .catch(err => {throw err});

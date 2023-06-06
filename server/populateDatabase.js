@@ -69,11 +69,6 @@ function setUserSchema(){
       VerificationToken varchar(64),
       VerificationTimeLimit bigint,
       SessionID VARCHAR(64), 
-    
-      UserType varchar(20),
-    
-      CreatedAt timestamp,
-      LastModified timestamp,
       PRIMARY KEY (ID)
     );
   `;
